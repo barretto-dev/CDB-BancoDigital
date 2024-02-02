@@ -12,17 +12,21 @@ import java.math.RoundingMode;
 public class ContaCorrente extends Conta{
 
     private final BigDecimal TAXA_MENSAL = new BigDecimal("31.25");
+    public ContaCorrente(){}
+    public ContaCorrente(Long id, BigDecimal saldo) {
+        super(id,saldo);
+    }
+    public ContaCorrente(BigDecimal saldo) {
+        super(saldo);
+    }
+
     public boolean pagarTaxaMensal(){
         BigDecimal saldoFinal = getSaldo().subtract(TAXA_MENSAL);
         if(saldoFinal.compareTo(BigDecimal.ZERO) < 0)
             return false;
 
-        setSaldo(saldoFinal.setScale(2, RoundingMode.UP));
+        setSaldo(saldoFinal);
         return true;
-    }
-
-    public ContaCorrente(BigDecimal saldo) {
-        super(saldo);
     }
 
     @Override

@@ -24,8 +24,13 @@ public abstract class Conta {
     private Cliente dono;*/
 
     public Conta() {}
+
+    public Conta(Long id, BigDecimal saldo) {
+        this.id = id;
+        this.saldo = saldo.setScale(2,RoundingMode.UP);;
+    }
     public Conta(BigDecimal saldo) {
-        this.saldo = saldo;
+        this.saldo = saldo.setScale(2,RoundingMode.UP);;
     }
 
     public boolean transferirPix(Conta destino, BigDecimal valor){
@@ -35,9 +40,8 @@ public abstract class Conta {
         if(saldoFinalOrigem.compareTo(BigDecimal.ZERO) < 0)
             return false;
 
-
-        setSaldo(saldoFinalOrigem.setScale(2, RoundingMode.UP));
-        destino.setSaldo(saldoFinalDestino.setScale(2, RoundingMode.UP));
+        setSaldo(saldoFinalOrigem);
+        destino.setSaldo(saldoFinalDestino);
         return true;
     }
 
