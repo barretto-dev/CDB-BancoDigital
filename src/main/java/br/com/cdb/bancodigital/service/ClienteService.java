@@ -59,6 +59,7 @@ public class ClienteService {
             clienteAtualizado.setNome(cliente.getNome());
             clienteAtualizado.setEndereco(cliente.getEndereco());
             clienteAtualizado.setDataNascimento(cliente.getDataNascimento());
+            clienteAtualizado.setTipo(cliente.getTipo());
 
             clienteAtualizado = clienteRepository.save(clienteAtualizado);
             return new ClienteDTO(clienteAtualizado);

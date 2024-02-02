@@ -9,7 +9,7 @@ import java.math.RoundingMode;
 @Entity
 @Table(name = "conta")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipo")
+@DiscriminatorColumn(name = "tipo", length = 3)
 public abstract class Conta {
 
     @Id

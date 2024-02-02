@@ -2,6 +2,7 @@ package br.com.cdb.bancodigital.dto.cliente;
 
 import br.com.cdb.bancodigital.entity.Cliente;
 import br.com.cdb.bancodigital.entity.enums.TipoCliente;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
@@ -14,8 +15,7 @@ public class ClienteDTO {
     private String cpf;
     private String endereco;
     private LocalDate dataNascimento;
-
-    @NotNull
+    @NotEmpty
     private TipoCliente tipo;
 
     public ClienteDTO() {

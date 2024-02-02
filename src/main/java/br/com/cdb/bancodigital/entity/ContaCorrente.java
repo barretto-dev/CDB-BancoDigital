@@ -3,6 +3,7 @@ package br.com.cdb.bancodigital.entity;
 import br.com.cdb.bancodigital.entity.enums.TipoConta;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -11,6 +12,7 @@ import java.math.RoundingMode;
 @DiscriminatorValue("COR")
 public class ContaCorrente extends Conta{
 
+    @Transient
     private final BigDecimal TAXA_MENSAL = new BigDecimal("31.25");
     public ContaCorrente(){}
     public ContaCorrente(Long id, BigDecimal saldo) {

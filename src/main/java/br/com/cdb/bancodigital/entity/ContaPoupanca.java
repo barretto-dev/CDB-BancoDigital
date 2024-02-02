@@ -3,6 +3,7 @@ package br.com.cdb.bancodigital.entity;
 import br.com.cdb.bancodigital.entity.enums.TipoConta;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -11,6 +12,7 @@ import java.math.RoundingMode;
 @DiscriminatorValue("POU")
 public class ContaPoupanca extends Conta{
 
+    @Transient
     private final BigDecimal TAXA_RENDIMENTO = new BigDecimal("11.25");;
 
     public ContaPoupanca(){}
