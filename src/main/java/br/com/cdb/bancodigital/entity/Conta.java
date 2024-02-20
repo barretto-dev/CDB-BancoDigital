@@ -19,6 +19,10 @@ public abstract class Conta {
     @Column(name = "saldo")
     private BigDecimal saldo;
 
+    @ManyToOne
+    @JoinColumn(name = "taxa_id")
+    private Taxa taxa;
+
     /*@ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente dono;*/
@@ -61,5 +65,13 @@ public abstract class Conta {
 
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo.setScale(2, RoundingMode.UP);
+    }
+
+    public Taxa getTaxa() {
+        return taxa;
+    }
+
+    public void setTaxa(Taxa taxa) {
+        this.taxa = taxa;
     }
 }

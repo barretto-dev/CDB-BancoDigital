@@ -12,8 +12,6 @@ import java.math.RoundingMode;
 @DiscriminatorValue("COR")
 public class ContaCorrente extends Conta{
 
-    @Transient
-    private final BigDecimal TAXA_MENSAL = new BigDecimal("31.25");
     public ContaCorrente(){}
     public ContaCorrente(Long id, BigDecimal saldo) {
         super(id,saldo);
@@ -23,7 +21,8 @@ public class ContaCorrente extends Conta{
     }
 
     public boolean pagarTaxaMensal(){
-        BigDecimal saldoFinal = getSaldo().subtract(TAXA_MENSAL);
+        BigDecimal taxaMensal = getTaxa().getValor();
+        BigDecimal saldoFinal = getSaldo().subtract(taxaMensal);
         if(saldoFinal.compareTo(BigDecimal.ZERO) < 0)
             return false;
 
