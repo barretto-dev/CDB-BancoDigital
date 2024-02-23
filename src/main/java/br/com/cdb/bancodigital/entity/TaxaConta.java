@@ -1,14 +1,14 @@
 package br.com.cdb.bancodigital.entity;
 
-import br.com.cdb.bancodigital.entity.enums.TipoTaxa;
+import br.com.cdb.bancodigital.entity.enums.TipoTaxaConta;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
-@Table(name = "taxa")
-public class Taxa {
+@Table(name = "taxa_conta")
+public class TaxaConta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,15 +16,15 @@ public class Taxa {
     private Long id;
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
-    private TipoTaxa tipo;
+    private TipoTaxaConta tipo;
     @Column(name = "valor")
     private BigDecimal valor;
 
     @OneToMany(mappedBy = "taxa")
     private List<Conta> contas;
 
-    public Taxa() {}
-    public Taxa(TipoTaxa tipo, BigDecimal valor) {
+    public TaxaConta() {}
+    public TaxaConta(TipoTaxaConta tipo, BigDecimal valor) {
         this.tipo = tipo;
         this.valor = valor;
     }
@@ -37,12 +37,12 @@ public class Taxa {
         this.id = id;
     }
 
-    public TipoTaxa getTipoTaxa() {
+    public TipoTaxaConta getTipoTaxa() {
         return tipo;
     }
 
-    public void setTipoTaxa(TipoTaxa tipoTaxa) {
-        this.tipo = tipoTaxa;
+    public void setTipoTaxa(TipoTaxaConta tipoTaxaConta) {
+        this.tipo = tipoTaxaConta;
     }
 
     public BigDecimal getValor() {

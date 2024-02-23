@@ -1,5 +1,8 @@
-INSERT INTO taxa(tipo, valor) VALUES ( 'MENSALIDADE_PADRAO', 31.25 );
-INSERT INTO taxa(tipo, valor) VALUES ( 'RENDIMENTO_PADRAO', 11.25 );
+INSERT INTO taxa_conta(tipo, valor) VALUES ( 'MENSALIDADE_PADRAO', 31.25 );
+INSERT INTO taxa_conta(tipo, valor) VALUES ( 'RENDIMENTO_PADRAO', 11.25 );
+
+INSERT INTO taxa_cartao(tipo, valor) VALUES ( 'DEBITO', 1.5 );
+INSERT INTO taxa_cartao(tipo, valor) VALUES ( 'CREDITO', 4.0 );
 
 INSERT INTO cliente(nome, cpf, endereco, data_nascimento, tipo) VALUES ( 'Rodrigo Perez', '12345678915', 'Rua A', '1968-05-11', 'C' );
 

@@ -2,11 +2,11 @@ package br.com.cdb.bancodigital.service;
 
 import br.com.cdb.bancodigital.dto.conta.ContaDTO;
 import br.com.cdb.bancodigital.entity.Conta;
-import br.com.cdb.bancodigital.entity.Taxa;
+import br.com.cdb.bancodigital.entity.TaxaConta;
 import br.com.cdb.bancodigital.entity.enums.TipoConta;
-import br.com.cdb.bancodigital.entity.enums.TipoTaxa;
+import br.com.cdb.bancodigital.entity.enums.TipoTaxaConta;
 import br.com.cdb.bancodigital.repository.ContaRepository;
-import br.com.cdb.bancodigital.repository.TaxaRepository;
+import br.com.cdb.bancodigital.repository.TaxaContaRepository;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class ContaService {
     ContaRepository repository;
 
     @Autowired
-    TaxaRepository taxaRepository;
+    TaxaContaRepository taxaContaRepository;
 
     @Transactional(readOnly = true)
     public ContaDTO findById(Long id){
@@ -44,13 +44,13 @@ public class ContaService {
     @Transactional
     public ContaDTO create(Conta conta){
 
-        Taxa taxa;
+        TaxaConta taxa;
 
         if(conta.getTipo().equals(TipoConta.CORRENTE)) {
-            taxa = taxaRepository.findByTipo(TipoTaxa.MENSALIDADE_PADRAO);
+            taxa = taxaContaRepository.findByTipo(TipoTaxaConta.MENSALIDADE_PADRAO);
         }
         else {
-            taxa = taxaRepository.findByTipo(TipoTaxa.RENDIMENTO_PADRAO);
+            taxa = taxaContaRepository.findByTipo(TipoTaxaConta.RENDIMENTO_PADRAO);
         }
 
         if(taxa == null) {

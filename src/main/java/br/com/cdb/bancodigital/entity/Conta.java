@@ -16,12 +16,18 @@ public abstract class Conta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @Column(name="numero", unique = true)
+    private int numero;
+
+    @Column(name="agencia")
+    private int agencia;
+
     @Column(name = "saldo")
     private BigDecimal saldo;
-
     @ManyToOne
     @JoinColumn(name = "taxa_id")
-    private Taxa taxa;
+    private TaxaConta taxa;
 
     /*@ManyToOne
     @JoinColumn(name = "cliente_id")
@@ -59,6 +65,22 @@ public abstract class Conta {
         this.id = id;
     }
 
+    public int getNumero() {
+        return numero;
+    }
+
+    public int getAgencia() {
+        return agencia;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public void setAgencia(int agencia) {
+        this.agencia = agencia;
+    }
+
     public BigDecimal getSaldo() {
         return saldo.setScale(2, RoundingMode.UP);
     }
@@ -67,11 +89,11 @@ public abstract class Conta {
         this.saldo = saldo.setScale(2, RoundingMode.UP);
     }
 
-    public Taxa getTaxa() {
+    public TaxaConta getTaxa() {
         return taxa;
     }
 
-    public void setTaxa(Taxa taxa) {
+    public void setTaxa(TaxaConta taxa) {
         this.taxa = taxa;
     }
 }
