@@ -17,29 +17,36 @@ public abstract class Conta {
     @Column(name = "id")
     private Long id;
 
-    @Column(name="numero", unique = true)
-    private int numero;
+    @Column(name="agencia", nullable = false)
+    private String agencia;
 
-    @Column(name="agencia")
-    private int agencia;
-
-    @Column(name = "saldo")
+    @Column(name = "saldo", nullable = false)
     private BigDecimal saldo;
     @ManyToOne
-    @JoinColumn(name = "taxa_id")
+    @JoinColumn(name = "taxa_id", nullable = false)
     private TaxaConta taxa;
 
-    /*@ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private Cliente dono;*/
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente dono;
 
     public Conta() {}
 
-    public Conta(Long id, BigDecimal saldo) {
+    public Conta(Long id, String agencia, BigDecimal saldo, Cliente dono) {
         this.id = id;
-        this.saldo = saldo.setScale(2,RoundingMode.UP);;
+        this.agencia = agencia;
+        this.saldo = saldo.setScale(2,RoundingMode.UP);
+        this.dono = dono;
     }
-    public Conta(BigDecimal saldo) {
+
+    public Conta(String agencia, BigDecimal saldo, Cliente dono) {
+        this.agencia = agencia;
+        this.saldo = saldo.setScale(2,RoundingMode.UP);
+        this.dono = dono;
+    }
+
+    public Conta(String agencia, BigDecimal saldo) {
+        this.agencia = agencia;
         this.saldo = saldo.setScale(2,RoundingMode.UP);;
     }
 
@@ -65,19 +72,11 @@ public abstract class Conta {
         this.id = id;
     }
 
-    public int getNumero() {
-        return numero;
-    }
-
-    public int getAgencia() {
+    public String getAgencia() {
         return agencia;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
-    public void setAgencia(int agencia) {
+    public void setAgencia(String agencia) {
         this.agencia = agencia;
     }
 
@@ -95,5 +94,13 @@ public abstract class Conta {
 
     public void setTaxa(TaxaConta taxa) {
         this.taxa = taxa;
+    }
+
+    public Cliente getDono() {
+        return dono;
+    }
+
+    public void setDono(Cliente dono) {
+        this.dono = dono;
     }
 }

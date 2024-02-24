@@ -2,6 +2,7 @@ package br.com.cdb.bancodigital.controller;
 
 import br.com.cdb.bancodigital.dto.cliente.ClienteDTO;
 import br.com.cdb.bancodigital.dto.conta.ContaDTO;
+import br.com.cdb.bancodigital.service.ClienteService;
 import br.com.cdb.bancodigital.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,7 +42,7 @@ public class ContaController {
 
     @PostMapping
     public ResponseEntity<ContaDTO> create(@RequestBody ContaDTO dto){
-        ContaDTO novaConta = service.create(dto.toConta());
+        ContaDTO novaConta = service.create(dto.toConta(), dto.getDonoId());
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(novaConta.getId()).toUri();

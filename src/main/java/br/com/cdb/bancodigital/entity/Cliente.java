@@ -29,8 +29,8 @@ public class Cliente {
     @Column(name = "tipo", nullable = false)
     private TipoCliente tipo;
 
-   /* @OneToMany(mappedBy = "dono")
-    private List<Conta> contas;*/
+    @OneToMany(mappedBy = "dono")
+    private List<Conta> contas;
 
     public Cliente(){}
 
@@ -99,9 +99,9 @@ public class Cliente {
         this.tipo = tipo;
     }
 
-    /*public List<Conta> getContas() {
+    public List<Conta> getContas() {
         return contas;
-    }*/
+    }
 
     @Override
     public boolean equals(Object o) {

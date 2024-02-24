@@ -1,10 +1,12 @@
 package br.com.cdb.bancodigital.service;
 
 import br.com.cdb.bancodigital.dto.conta.ContaDTO;
+import br.com.cdb.bancodigital.entity.Cliente;
 import br.com.cdb.bancodigital.entity.Conta;
 import br.com.cdb.bancodigital.entity.TaxaConta;
 import br.com.cdb.bancodigital.entity.enums.TipoConta;
 import br.com.cdb.bancodigital.entity.enums.TipoTaxaConta;
+import br.com.cdb.bancodigital.repository.ClienteRepository;
 import br.com.cdb.bancodigital.repository.ContaRepository;
 import br.com.cdb.bancodigital.repository.TaxaContaRepository;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
@@ -26,6 +28,9 @@ public class ContaService {
     @Autowired
     TaxaContaRepository taxaContaRepository;
 
+    @Autowired
+    ClienteRepository clienteRepository;
+
     @Transactional(readOnly = true)
     public ContaDTO findById(Long id){
         Optional<Conta> contaOPT = repository.findById(id);
@@ -42,7 +47,13 @@ public class ContaService {
     }
 
     @Transactional
-    public ContaDTO create(Conta conta){
+    public ContaDTO create(Conta conta, Long donoId){
+
+        Optional<Cliente> clienteOPT = clienteRepository.findById(donoId);
+        Cliente cliente = clienteOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Cliente dono da conta não encontrada")
+        );
+        conta.setDono(cliente);
 
         TaxaConta taxa;
 

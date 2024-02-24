@@ -13,11 +13,15 @@ import java.math.RoundingMode;
 public class ContaCorrente extends Conta{
 
     public ContaCorrente(){}
-    public ContaCorrente(Long id, BigDecimal saldo) {
-        super(id,saldo);
+    public ContaCorrente(Long id, String agencia, BigDecimal saldo, Cliente dono) {
+        super(id, agencia, saldo, dono);
     }
-    public ContaCorrente(BigDecimal saldo) {
-        super(saldo);
+    public ContaCorrente(String agencia, BigDecimal saldo, Cliente dono) {
+        super(agencia, saldo, dono);
+    }
+
+    public ContaCorrente(String agencia, BigDecimal saldo) {
+        super(agencia, saldo);
     }
 
     public boolean pagarTaxaMensal(){

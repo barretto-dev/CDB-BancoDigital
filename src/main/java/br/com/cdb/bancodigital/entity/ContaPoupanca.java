@@ -12,9 +12,15 @@ import java.math.RoundingMode;
 @DiscriminatorValue("POU")
 public class ContaPoupanca extends Conta{
     public ContaPoupanca(){}
-    public ContaPoupanca(Long id, BigDecimal saldo) {super(id,saldo);}
-    public ContaPoupanca(BigDecimal saldo) {
-        super(saldo);
+    public ContaPoupanca(Long id, String agencia, BigDecimal saldo, Cliente dono) {
+        super(id, agencia, saldo, dono);
+    }
+    public ContaPoupanca(String agencia, BigDecimal saldo, Cliente dono) {
+        super(agencia, saldo, dono);
+    }
+
+    public ContaPoupanca(String agencia, BigDecimal saldo) {
+        super(agencia, saldo);
     }
 
     public void aplicarRendimento(BigDecimal taxaRendimento){
