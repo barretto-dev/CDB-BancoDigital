@@ -4,6 +4,7 @@ import br.com.cdb.bancodigital.entity.enums.TipoTaxaCartao;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "taxa_cartao")
@@ -19,6 +20,9 @@ public class TaxaCartao {
 
     @Column(name = "valor")
     private BigDecimal valor;
+
+    @OneToMany(mappedBy = "taxa")
+    private List<Cartao> cartoes;
 
     public TaxaCartao(){}
     public TaxaCartao(TipoTaxaCartao tipo, BigDecimal valor) {
@@ -48,5 +52,13 @@ public class TaxaCartao {
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
+    }
+
+    public List<Cartao> getCartoes() {
+        return cartoes;
+    }
+
+    public void setCartoes(List<Cartao> cartoes) {
+        this.cartoes = cartoes;
     }
 }

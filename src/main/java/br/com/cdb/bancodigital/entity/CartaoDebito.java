@@ -1,15 +1,31 @@
 package br.com.cdb.bancodigital.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
+
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "cartao_debito")
+@PrimaryKeyJoinColumn(name = "cartao_id")
 public class CartaoDebito extends Cartao {
 
-    private double limiteDiário;
+    @Column(name = "limite_diario", nullable = false)
+    private BigDecimal limiteDiario;
 
-    public CartaoDebito(double limiteDiário) {
-        this.limiteDiário = limiteDiário;
+    public CartaoDebito(String nomeDono, int codigoSeguranca, String senha, boolean ativo,
+                        Conta conta,BigDecimal limiteDiario) {
+        super(nomeDono, codigoSeguranca, senha, ativo, conta);
+        this.limiteDiario = limiteDiario;
     }
 
-    @Override
-    public boolean realizarPagamento(Double valor) {
-        return false;
+    public BigDecimal getLimiteDiario() {
+        return limiteDiario;
+    }
+
+    public void setLimiteDiario(BigDecimal limiteDiario) {
+        this.limiteDiario = limiteDiario;
     }
 }

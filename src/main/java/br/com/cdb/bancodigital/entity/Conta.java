@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 @Entity
 @Table(name = "conta")
@@ -29,6 +30,9 @@ public abstract class Conta {
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente dono;
+
+    @OneToMany(mappedBy = "conta")
+    private List<Cartao> cartoes;
 
     public Conta() {}
 
@@ -72,9 +76,7 @@ public abstract class Conta {
         this.id = id;
     }
 
-    public String getAgencia() {
-        return agencia;
-    }
+    public String getAgencia() { return agencia; }
 
     public void setAgencia(String agencia) {
         this.agencia = agencia;
@@ -103,4 +105,8 @@ public abstract class Conta {
     public void setDono(Cliente dono) {
         this.dono = dono;
     }
+
+    public List<Cartao> getCartoes() { return cartoes; }
+
+    public void setCartoes(List<Cartao> cartoes) { this.cartoes = cartoes; }
 }
