@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.Query;
 public interface TaxaCartaoRepository extends JpaRepository<TaxaCartao, Long> {
 
     @Query("SELECT t FROM TaxaCartao t WHERE t.tipo = :tipo")
-    public TaxaCartao findByTipo(TipoTaxaCartao t);
+    public TaxaCartao findByTipo(TipoTaxaCartao tipo);
 }

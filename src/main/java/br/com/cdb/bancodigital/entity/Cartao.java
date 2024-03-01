@@ -10,16 +10,22 @@ import java.math.RoundingMode;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Cartao {
 
+    private static final int NUMERO_LENGTH = 16;
+    private static final int CODIGO_SEGURANÇA_LENGTH = 3;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "numero", nullable = false, unique = true, length = NUMERO_LENGTH)
+    private String numero;
+
     @Column(name = "nome_dono", nullable = false)
     private String nomeDono;
 
-    @Column(name = "codigo_seg", nullable = false)
-    private int codigoSeguranca;
+    @Column(name = "codigo_seg", nullable = false, length = 3)
+    private String codigoSeguranca;
 
     @Column(name = "senha", nullable = false)
     private String senha;
@@ -35,7 +41,9 @@ public abstract class Cartao {
     @JoinColumn(name = "taxa_id", nullable = false)
     private TaxaCartao taxa;
 
-    public Cartao(String nomeDono, int codigoSeguranca, String senha, boolean ativo, Conta conta){
+    public Cartao(){}
+
+    public Cartao(String nomeDono, String codigoSeguranca, String senha, boolean ativo, Conta conta){
         this.setNomeDono(nomeDono);
         this.setCodigoSeguranca(codigoSeguranca);
         this.setSenha(senha);
@@ -78,6 +86,14 @@ public abstract class Cartao {
         this.id = id;
     }
 
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
     public String getNomeDono() {
         return nomeDono;
     }
@@ -86,11 +102,11 @@ public abstract class Cartao {
         this.nomeDono = nomeDono;
     }
 
-    public int getCodigoSeguranca() {
+    public String getCodigoSeguranca() {
         return codigoSeguranca;
     }
 
-    public void setCodigoSeguranca(int codigoSeguranca) {
+    public void setCodigoSeguranca(String codigoSeguranca) {
         this.codigoSeguranca = codigoSeguranca;
     }
 
@@ -125,4 +141,8 @@ public abstract class Cartao {
     public void setTaxa(TaxaCartao taxa) {
         this.taxa = taxa;
     }
+
+    public static int getNumeroLength(){ return NUMERO_LENGTH; }
+
+    public static int getCodigoSegurancaLength(){ return CODIGO_SEGURANÇA_LENGTH; }
 }

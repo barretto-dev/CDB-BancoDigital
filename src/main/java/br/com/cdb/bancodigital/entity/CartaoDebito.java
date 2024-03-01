@@ -15,10 +15,18 @@ public class CartaoDebito extends Cartao {
     @Column(name = "limite_diario", nullable = false)
     private BigDecimal limiteDiario;
 
-    public CartaoDebito(String nomeDono, int codigoSeguranca, String senha, boolean ativo,
-                        Conta conta,BigDecimal limiteDiario) {
+    public CartaoDebito() {}
+
+    public CartaoDebito(String nomeDono, String codigoSeguranca, String senha, boolean ativo,
+                        Conta conta, BigDecimal limiteDiario) {
         super(nomeDono, codigoSeguranca, senha, ativo, conta);
         this.limiteDiario = limiteDiario;
+    }
+
+    public CartaoDebito(String nomeDono, String senha, boolean ativo){
+        setNomeDono(nomeDono);
+        setSenha(senha);
+        setAtivo(ativo);
     }
 
     public BigDecimal getLimiteDiario() {

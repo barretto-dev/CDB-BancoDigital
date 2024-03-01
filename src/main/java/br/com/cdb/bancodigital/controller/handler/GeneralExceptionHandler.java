@@ -76,8 +76,10 @@ public class GeneralExceptionHandler {
 
             }
         }
-        else
+        else {
+            e.printStackTrace();
             msgError.setMensagem("Existe algo errado com o json da requisição");
+        }
 
         return ResponseEntity.status(status).body(msgError);
     }

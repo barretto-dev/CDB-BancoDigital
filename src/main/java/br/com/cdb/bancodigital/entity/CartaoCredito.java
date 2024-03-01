@@ -16,10 +16,18 @@ public class CartaoCredito extends Cartao{
     @Column(name = "limite_mensal", nullable = false)
     private BigDecimal limiteMensal;
 
-    public CartaoCredito(String nomeDono, int codigoSeguranca, String senha, boolean ativo,
+    public CartaoCredito(){}
+
+    public CartaoCredito(String nomeDono, String codigoSeguranca, String senha, boolean ativo,
                          Conta conta, BigDecimal limiteMensal) {
         super(nomeDono, codigoSeguranca, senha, ativo, conta);
         this.limiteMensal = limiteMensal;
+    }
+
+    public CartaoCredito(String nomeDono, String senha, boolean ativo){
+        setNomeDono(nomeDono);
+        setSenha(senha);
+        setAtivo(ativo);
     }
 
     public BigDecimal getLimiteMensal() {
