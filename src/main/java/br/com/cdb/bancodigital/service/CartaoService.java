@@ -6,6 +6,7 @@ import br.com.cdb.bancodigital.entity.enums.TipoTaxaCartao;
 import br.com.cdb.bancodigital.repository.CartaoRepository;
 import br.com.cdb.bancodigital.repository.ContaRepository;
 import br.com.cdb.bancodigital.repository.TaxaCartaoRepository;
+import br.com.cdb.bancodigital.service.encrypt.PasswordEncoder;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,9 @@ public class CartaoService {
             throw new EntidadeNaoEncontradaException("Taxa para o cartao não foi encontrada");
 
         cartao.setTaxa(taxaCartao);
+
+        String senhaCripto = PasswordEncoder.encrypt(cartao.getSenha());
+        cartao.setSenha(senhaCripto);
 
         cartao = repository.save(cartao);
         return new CartaoMinDTO(cartao);
