@@ -5,6 +5,7 @@ import br.com.cdb.bancodigital.entity.*;
 import br.com.cdb.bancodigital.entity.enums.TipoTaxaCartao;
 import br.com.cdb.bancodigital.repository.CartaoRepository;
 import br.com.cdb.bancodigital.repository.ContaRepository;
+import br.com.cdb.bancodigital.repository.PagamentoRepository;
 import br.com.cdb.bancodigital.repository.TaxaCartaoRepository;
 import br.com.cdb.bancodigital.service.encrypt.PasswordEncoder;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Optional;
 
 import java.security.SecureRandom;
@@ -29,6 +32,9 @@ public class CartaoService {
     @Autowired
     ContaRepository contaRepository;
 
+    @Autowired
+    PagamentoRepository pagamentoRepository;
+
     @Transactional
     public CartaoMinDTO create(Cartao cartao, Long contaId){
 
@@ -38,6 +44,7 @@ public class CartaoService {
                 () -> new EntidadeNaoEncontradaException("Conta informada não encontrada")
         );
         cartao.setConta(conta);
+        cartao.setDataCriacao(LocalDate.now(ZoneId.of("Brazil/East")));
 
         //Aqui é gerado o numero do novo cartao
         Cartao ultimoCartao = repository.findLastCartao();
@@ -68,18 +75,7 @@ public class CartaoService {
 
     }
 
-    @Transactional
-    public boolean makePayment(Long cartaoId, BigDecimal valor){
-        Optional<Cartao> cartaoOPT = repository.findById(cartaoId);
-        Cartao cartao = cartaoOPT.orElseThrow(
-                () -> new EntidadeNaoEncontradaException("Cartão não encontrado")
-        );
-        boolean isPago = cartao.realizarPagamento(valor);
-        if(!isPago)
-            return false;
 
-        return true;
-    }
 
     private String gerarNumeroNovoCartao(String numeroUltimoCartao){
         int num = Integer.parseInt(numeroUltimoCartao);

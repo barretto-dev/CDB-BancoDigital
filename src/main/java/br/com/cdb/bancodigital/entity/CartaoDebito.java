@@ -6,6 +6,7 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "cartao_debito")
@@ -17,9 +18,9 @@ public class CartaoDebito extends Cartao {
 
     public CartaoDebito() {}
 
-    public CartaoDebito(String nomeDono, String codigoSeguranca, String senha, boolean ativo,
-                        Conta conta, BigDecimal limiteDiario) {
-        super(nomeDono, codigoSeguranca, senha, ativo, conta);
+    public CartaoDebito(String nomeDono, String codigoSeguranca, String senha, LocalDate dataCriacao,
+                        boolean ativo, Conta conta, BigDecimal limiteDiario) {
+        super(nomeDono, codigoSeguranca, senha, dataCriacao, ativo, conta);
         this.limiteDiario = limiteDiario;
     }
 

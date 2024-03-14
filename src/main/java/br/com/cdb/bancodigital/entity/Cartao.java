@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "cartao")
@@ -30,6 +32,9 @@ public abstract class Cartao {
     @Column(name = "senha", nullable = false)
     private String senha;
 
+    @Column(name = "data_criacao", nullable = false)
+    private LocalDate dataCriacao;
+
     @Column(name = "ativo", nullable = false)
     private boolean ativo;
 
@@ -41,12 +46,16 @@ public abstract class Cartao {
     @JoinColumn(name = "taxa_id", nullable = false)
     private TaxaCartao taxa;
 
+    @OneToMany(mappedBy = "cartao")
+    private List<Pagamento> pagamentos;
+
     public Cartao(){}
 
-    public Cartao(String nomeDono, String codigoSeguranca, String senha, boolean ativo, Conta conta){
+    public Cartao(String nomeDono, String codigoSeguranca, String senha, LocalDate dataCriacao, boolean ativo, Conta conta){
         this.setNomeDono(nomeDono);
         this.setCodigoSeguranca(codigoSeguranca);
         this.setSenha(senha);
+        this.setDataCriacao(dataCriacao);
         this.setAtivo(ativo);
         this.setConta(conta);
     }
@@ -118,6 +127,14 @@ public abstract class Cartao {
         this.senha = senha;
     }
 
+    public LocalDate getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
     public boolean isAtivo() {
         return ativo;
     }
@@ -140,6 +157,14 @@ public abstract class Cartao {
 
     public void setTaxa(TaxaCartao taxa) {
         this.taxa = taxa;
+    }
+
+    public List<Pagamento> getPagamentos() {
+        return pagamentos;
+    }
+
+    public void setPagamentos(List<Pagamento> pagamentos) {
+        this.pagamentos = pagamentos;
     }
 
     public static int getNumeroLength(){ return NUMERO_LENGTH; }

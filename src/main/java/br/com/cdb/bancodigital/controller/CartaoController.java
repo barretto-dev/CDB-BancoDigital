@@ -23,9 +23,4 @@ public class CartaoController {
         CartaoMinDTO result = service.create(dto.toCartao(), dto.getContaId());
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
-    @PutMapping(value = "/{id}/realizarPagamento")
-    public ResponseEntity<String> makePayment(@PathVariable Long id, @RequestBody PagamentoDTO dto){
-        boolean isPago = service.makePayment(id, dto.getValor());
-        return ResponseEntity.status(204).body("Pagamento realizado com sucesso");
-    }
 }
