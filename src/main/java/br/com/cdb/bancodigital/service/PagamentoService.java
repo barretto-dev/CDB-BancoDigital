@@ -1,6 +1,6 @@
 package br.com.cdb.bancodigital.service;
 
-import br.com.cdb.bancodigital.dto.cartao.PagamentoDTO;
+import br.com.cdb.bancodigital.dto.pagamento.PagamentoDTO;
 import br.com.cdb.bancodigital.entity.Cartao;
 import br.com.cdb.bancodigital.entity.CartaoCredito;
 import br.com.cdb.bancodigital.entity.CartaoDebito;

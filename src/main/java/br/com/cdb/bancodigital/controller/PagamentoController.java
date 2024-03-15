@@ -1,6 +1,6 @@
 package br.com.cdb.bancodigital.controller;
 
-import br.com.cdb.bancodigital.dto.cartao.PagamentoDTO;
+import br.com.cdb.bancodigital.dto.pagamento.PagamentoDTO;
 import br.com.cdb.bancodigital.service.PagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

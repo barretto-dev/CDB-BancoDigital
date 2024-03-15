@@ -5,6 +5,8 @@ import br.com.cdb.bancodigital.entity.Cartao;
 import br.com.cdb.bancodigital.entity.Conta;
 import jakarta.persistence.Column;
 
+import java.math.BigDecimal;
+
 public class CartaoMinDTO {
 
     private Long id;
@@ -13,6 +15,10 @@ public class CartaoMinDTO {
     private String nomeDono;
 
     private String codigoSeguranca;
+
+    private String tipo;
+
+    private BigDecimal limite;
 
     private Long contaId;
 
@@ -23,6 +29,8 @@ public class CartaoMinDTO {
         this.numero = NumeroCartaoFormatter.formatar(cartao);
         this.nomeDono = cartao.getNomeDono();
         this.codigoSeguranca = cartao.getCodigoSeguranca();
+        this.tipo = cartao.getTipo().name();
+        this.limite = cartao.getLimite();
         this.contaId = cartao.getConta().getId();
     }
 
@@ -56,6 +64,18 @@ public class CartaoMinDTO {
 
     public void setCodigoSeguranca(String codigoSeguranca) {
         this.codigoSeguranca = codigoSeguranca;
+    }
+
+    public String getTipo() { return tipo; }
+
+    public void setTipo(String tipo) { this.tipo = tipo; }
+
+    public BigDecimal getLimite() {
+        return limite;
+    }
+
+    public void setLimite(BigDecimal limite) {
+        this.limite = limite;
     }
 
     public Long getContaId() {

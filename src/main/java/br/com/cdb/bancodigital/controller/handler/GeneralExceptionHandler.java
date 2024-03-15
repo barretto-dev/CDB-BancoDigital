@@ -1,9 +1,6 @@
 package br.com.cdb.bancodigital.controller.handler;
 
-import br.com.cdb.bancodigital.service.exception.BancoDeDadosException;
-import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
-import br.com.cdb.bancodigital.service.exception.EnumInvalidoException;
-import br.com.cdb.bancodigital.service.exception.PagamentoInvalidoException;
+import br.com.cdb.bancodigital.service.exception.*;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -55,8 +52,20 @@ public class GeneralExceptionHandler {
     }
 
     @ExceptionHandler(PagamentoInvalidoException.class)
-    public ResponseEntity<MensagemDeErro> enumInvalido(PagamentoInvalidoException e, HttpServletRequest request){
+    public ResponseEntity<MensagemDeErro> pagamentoInvalido(PagamentoInvalidoException e, HttpServletRequest request){
         HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        MensagemDeErro msgError = new MensagemDeErro();
+        msgError.setStatus(status.value());
+        msgError.setMensagem(e.getMessage());
+        msgError.setCaminho(request.getRequestURI());
+
+        return ResponseEntity.status(status).body(msgError);
+    }
+
+    @ExceptionHandler(OperacaoProibidaException.class)
+    public ResponseEntity<MensagemDeErro> operacaoProibida(OperacaoProibidaException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.FORBIDDEN;
 
         MensagemDeErro msgError = new MensagemDeErro();
         msgError.setStatus(status.value());

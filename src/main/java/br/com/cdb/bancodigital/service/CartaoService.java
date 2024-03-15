@@ -2,6 +2,7 @@ package br.com.cdb.bancodigital.service;
 
 import br.com.cdb.bancodigital.dto.cartao.CartaoMinDTO;
 import br.com.cdb.bancodigital.entity.*;
+import br.com.cdb.bancodigital.entity.enums.TipoCartao;
 import br.com.cdb.bancodigital.entity.enums.TipoTaxaCartao;
 import br.com.cdb.bancodigital.repository.CartaoRepository;
 import br.com.cdb.bancodigital.repository.ContaRepository;
@@ -9,6 +10,7 @@ import br.com.cdb.bancodigital.repository.PagamentoRepository;
 import br.com.cdb.bancodigital.repository.TaxaCartaoRepository;
 import br.com.cdb.bancodigital.service.encrypt.PasswordEncoder;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
+import br.com.cdb.bancodigital.service.exception.OperacaoProibidaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,31 @@ public class CartaoService {
 
     @Autowired
     PagamentoRepository pagamentoRepository;
+
+    @Transactional(readOnly = true)
+    public CartaoMinDTO findById(Long id){
+        Optional<Cartao> cartaoOPT = repository.findById(id);
+        Cartao cartao = cartaoOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Cartão informada não encontrada")
+        );
+        return new CartaoMinDTO(cartao);
+    }
+
+    @Transactional()
+    public CartaoMinDTO updateLimite(Long id, BigDecimal limite){
+        Optional<Cartao> cartaoOPT = repository.findById(id);
+        Cartao cartao = cartaoOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Cartão informada não encontrada")
+        );
+
+        if(!cartao.getTipo().equals(TipoCartao.DEBITO))
+            throw new OperacaoProibidaException("Apenas cartões de debito podem alterar o limite");
+
+        cartao.setLimite(limite);
+
+        cartao = repository.save(cartao);
+        return new CartaoMinDTO(cartao);
+    }
 
     @Transactional
     public CartaoMinDTO create(Cartao cartao, Long contaId){
@@ -112,13 +139,11 @@ public class CartaoService {
         TaxaCartao taxaCartao = null;
 
         if(cartao instanceof CartaoDebito){
-            ((CartaoDebito) cartao).setLimiteDiario(new BigDecimal(600.00));
             taxaCartao = taxaCartaoRepository.findByTipo(TipoTaxaCartao.DEBITO);
 
         }
         else if (cartao instanceof CartaoCredito){
-            ((CartaoCredito) cartao).setLimiteMensal(new BigDecimal(2100.00));
-            taxaCartao = taxaCartaoRepository.findByTipo(TipoTaxaCartao.DEBITO);
+            taxaCartao = taxaCartaoRepository.findByTipo(TipoTaxaCartao.CREDITO);
         }
 
         return taxaCartao;

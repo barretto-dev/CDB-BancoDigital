@@ -1,4 +1,4 @@
-package br.com.cdb.bancodigital.dto.cartao;
+package br.com.cdb.bancodigital.dto.pagamento;
 
 import br.com.cdb.bancodigital.entity.Pagamento;
 

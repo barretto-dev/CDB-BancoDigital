@@ -1,5 +1,6 @@
 package br.com.cdb.bancodigital.entity;
 
+import br.com.cdb.bancodigital.entity.enums.TipoCartao;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -86,6 +87,12 @@ public abstract class Cartao {
         conta.setSaldo(saldoFinal);
         return true;
     };
+
+    public abstract TipoCartao getTipo();
+
+    public abstract BigDecimal getLimite();
+
+    public abstract void setLimite(BigDecimal limite);
 
     public Long getId() {
         return id;
