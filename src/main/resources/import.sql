@@ -19,4 +19,9 @@ INSERT INTO cartao_credito(limite_mensal, cartao_id) VALUES ( 2000.00, 2);
 INSERT INTO pagamento(remetente, valor, parcela_atual, parcela_total, data_pag, cartao_id) VALUES ('Empresa A', 50.00, null, null, '2024-03-11 19:34:43.309845', 2);
 INSERT INTO pagamento(remetente, valor, parcela_atual, parcela_total, data_pag, cartao_id) VALUES ('Empresa B', 900.00, null, null, NOW(), 2);
 
+INSERT INTO seguro(nome_produto, descricao) VALUES ('automóvel', 'TESTE 1')
+INSERT INTO seguro(nome_produto, descricao) VALUES ('imóvel', 'TESTE 2')
+
+INSERT INTO apolice(cartao_credito_id, seguro_id, numero, data, valor ) VALUES ( 2, 1, '001', NOW(), 270.00)
+
 

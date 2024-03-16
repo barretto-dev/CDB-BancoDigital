@@ -2,14 +2,12 @@ package br.com.cdb.bancodigital.entity;
 
 
 import br.com.cdb.bancodigital.entity.enums.TipoCartao;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "cartao_credito")
@@ -18,6 +16,9 @@ public class CartaoCredito extends Cartao{
 
     @Column(name = "limite_mensal", nullable = false)
     private BigDecimal limiteMensal = BigDecimal.valueOf(2100.00);
+
+    @OneToMany(mappedBy = "cartaoCredito")
+    private List<Apolice> apolices;
 
     public CartaoCredito(){}
 
@@ -51,5 +52,9 @@ public class CartaoCredito extends Cartao{
 
     public void setLimiteMensal(BigDecimal limite) {
         this.limiteMensal = limite.setScale(2, RoundingMode.DOWN);
+    }
+
+    public List<Apolice> getApolices() {
+        return apolices;
     }
 }
