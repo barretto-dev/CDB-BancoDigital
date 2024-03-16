@@ -12,6 +12,8 @@ import java.time.ZoneId;
 @IdClass(ApoliceID.class)
 public class Apolice {
 
+    private static final int NUMERO_LENGTH = 12;
+
     @Id
     @ManyToOne
     @JoinColumn(name = "cartao_credito_id", referencedColumnName = "cartao_id")
@@ -22,7 +24,7 @@ public class Apolice {
     @JoinColumn(name = "seguro_id", referencedColumnName = "id")
     private Seguro seguro;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = NUMERO_LENGTH)
     private String numero;
 
     @Column(nullable = false)
@@ -78,4 +80,6 @@ public class Apolice {
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
+
+    public static int getNumeroLength(){ return NUMERO_LENGTH; }
 }

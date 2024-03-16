@@ -1,14 +1,15 @@
 package br.com.cdb.bancodigital.dto.formatters;
 
+import br.com.cdb.bancodigital.entity.Apolice;
 import br.com.cdb.bancodigital.entity.Cartao;
 
-public class NumeroCartaoFormatter{
+public class NumeroApoliceFormatter{
 
-    //Recebe o numero do cartao e aplica um espaçamento
+    //Recebe o numero da apolice e aplica um espaçamento
     //a cada 4 digitos;
-    public static String formatar(Cartao cartao){
-        int numeroDigitos = Cartao.getNumeroLength();
-        String numeroSemFormatacao = cartao.getNumero();
+    public static String formatar(Apolice apolice){
+        int numeroDigitos = Apolice.getNumeroLength();
+        String numeroSemFormatacao = apolice.getNumero();
         StringBuilder numeroComFormatacao = new StringBuilder();
         for(int i = 0; i < numeroDigitos; i++){
 
@@ -21,4 +22,5 @@ public class NumeroCartaoFormatter{
         return numeroComFormatacao.toString();
 
     }
+
 }
