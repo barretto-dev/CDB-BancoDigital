@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Entity
@@ -21,7 +22,7 @@ public class TransferenciaPix {
     private BigDecimal valor;
 
     @Column(name = "data", nullable = false)
-    private LocalDate data = LocalDate.now(ZoneId.of("Brazil/East"));
+    private LocalDateTime data = LocalDateTime.now(ZoneId.of("Brazil/East"));
     @ManyToOne
     @JoinColumn(name = "conta_id", nullable = false)
     private Conta conta;
@@ -58,11 +59,11 @@ public class TransferenciaPix {
         this.valor = valor.setScale(2,RoundingMode.DOWN);
     }
 
-    public LocalDate getData() {
+    public LocalDateTime getData() {
         return data;
     }
 
-    public void setData(LocalDate data) {
+    public void setData(LocalDateTime data) {
         this.data = data;
     }
 

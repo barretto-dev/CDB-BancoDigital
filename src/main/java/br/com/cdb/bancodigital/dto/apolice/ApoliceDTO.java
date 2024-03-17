@@ -1,6 +1,7 @@
 package br.com.cdb.bancodigital.dto.apolice;
 
 import br.com.cdb.bancodigital.dto.cartao.CartaoMinDTO;
+import br.com.cdb.bancodigital.dto.formatters.LocalDateFormatter;
 import br.com.cdb.bancodigital.dto.formatters.NumeroApoliceFormatter;
 import br.com.cdb.bancodigital.dto.seguro.SeguroDTO;
 import br.com.cdb.bancodigital.entity.Apolice;
@@ -12,7 +13,7 @@ public class ApoliceDTO {
 
     private String numero;
 
-    private LocalDate data;
+    private String data;
 
     private BigDecimal valor;
 
@@ -24,7 +25,7 @@ public class ApoliceDTO {
 
     public ApoliceDTO(Apolice apolice){
         this.numero = NumeroApoliceFormatter.formatar(apolice);
-        this.data = apolice.getData();
+        this.data = LocalDateFormatter.formatar(apolice.getData());
         this.valor = apolice.getValor();
         this.dadosCartao = new CartaoMinDTO(apolice.getCartaoCredito());
         this.dadosSeguro = new SeguroDTO(apolice.getSeguro());
@@ -38,13 +39,11 @@ public class ApoliceDTO {
         this.numero = numero;
     }
 
-    public LocalDate getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
+    public void setData(LocalDate data) {this.data = LocalDateFormatter.formatar(data);}
 
     public BigDecimal getValor() {
         return valor;

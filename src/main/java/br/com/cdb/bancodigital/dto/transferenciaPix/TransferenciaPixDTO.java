@@ -1,5 +1,6 @@
 package br.com.cdb.bancodigital.dto.transferenciaPix;
 
+import br.com.cdb.bancodigital.dto.formatters.LocalDateTimeFormatter;
 import br.com.cdb.bancodigital.entity.TransferenciaPix;
 
 import java.math.BigDecimal;
@@ -11,6 +12,8 @@ public class TransferenciaPixDTO {
 
     private BigDecimal valor;
 
+    private String data;
+
     private Long contaId;
 
     public TransferenciaPixDTO(){}
@@ -19,6 +22,7 @@ public class TransferenciaPixDTO {
         this.id = transferenciaPix.getId();
         this.destinatario = transferenciaPix.getDestinatario();
         this.valor = transferenciaPix.getValor();
+        this.data = LocalDateTimeFormatter.formatar(transferenciaPix.getData());
         this.contaId = transferenciaPix.getConta().getId();
     }
 
@@ -45,6 +49,10 @@ public class TransferenciaPixDTO {
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
+
+    public String getData() { return data; }
+
+    public void setData(String data) { this.data = data; }
 
     public Long getContaId() {
         return contaId;
