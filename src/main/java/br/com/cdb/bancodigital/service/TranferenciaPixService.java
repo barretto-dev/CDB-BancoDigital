@@ -9,6 +9,8 @@ import br.com.cdb.bancodigital.repository.TransferenciaPixRepository;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import br.com.cdb.bancodigital.service.exception.TransferenciaPixInvalidaException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,4 +52,14 @@ public class TranferenciaPixService {
         return new TransferenciaPixDTO(transferenciaPix);
     }
 
+    public Page<TransferenciaPixDTO> findAllByCartaoId(Long contaId, PageRequest pageRequest) {
+
+        Optional<Conta> contaOpt = contaRepository.findById(contaId);
+        Conta conta = contaOpt.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Conta informada não foi encontrada")
+        );
+
+        Page<TransferenciaPix> lista = repository.findAllByCartaoId( contaId, pageRequest);
+        return lista.map( transferenciaPix -> new TransferenciaPixDTO(transferenciaPix));
+    }
 }
