@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.util.Optional;
 
@@ -70,8 +72,13 @@ public class CartaoService {
         Conta conta = contaOPT.orElseThrow(
                 () -> new EntidadeNaoEncontradaException("Conta informada não encontrada")
         );
+
+        LocalDate dataCriacao = LocalDate.now(ZoneId.of("Brazil/East"));
+        YearMonth validade = YearMonth.from(dataCriacao.plusYears(Cartao.getValidadeEmAnos()));
+
         cartao.setConta(conta);
-        cartao.setDataCriacao(LocalDate.now(ZoneId.of("Brazil/East")));
+        cartao.setDataCriacao(dataCriacao);
+        cartao.setValidade(validade);
 
         //Aqui é gerado o numero do novo cartao
         Cartao ultimoCartao = repository.findLastCartao();

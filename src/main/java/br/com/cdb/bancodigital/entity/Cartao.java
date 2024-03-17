@@ -1,11 +1,14 @@
 package br.com.cdb.bancodigital.entity;
 
+import br.com.cdb.bancodigital.converter.YearMonthDateAttributeConverter;
 import br.com.cdb.bancodigital.entity.enums.TipoCartao;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.List;
 
 @Entity
@@ -15,6 +18,8 @@ public abstract class Cartao {
 
     private static final int NUMERO_LENGTH = 16;
     private static final int CODIGO_SEGURANÇA_LENGTH = 3;
+
+    private static final int VALIDADE_EM_ANOS = 5;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +41,10 @@ public abstract class Cartao {
     @Column(name = "data_criacao", nullable = false)
     private LocalDate dataCriacao;
 
+    @Column(name = "validade", nullable = false, columnDefinition = "date")
+    @Convert(converter = YearMonthDateAttributeConverter.class)
+    private YearMonth validade;
+
     @Column(name = "ativo", nullable = false)
     private boolean ativo;
 
@@ -52,11 +61,13 @@ public abstract class Cartao {
 
     public Cartao(){}
 
-    public Cartao(String nomeDono, String codigoSeguranca, String senha, LocalDate dataCriacao, boolean ativo, Conta conta){
+    public Cartao(String nomeDono, String codigoSeguranca, String senha, YearMonth validade,
+                  LocalDate dataCriacao, boolean ativo, Conta conta){
         this.setNomeDono(nomeDono);
         this.setCodigoSeguranca(codigoSeguranca);
         this.setSenha(senha);
         this.setDataCriacao(dataCriacao);
+        this.setValidade(validade);
         this.setAtivo(ativo);
         this.setConta(conta);
     }
@@ -87,6 +98,13 @@ public abstract class Cartao {
         conta.setSaldo(saldoFinal);
         return true;
     };
+
+    public boolean isValido(){
+        if (YearMonth.now(ZoneId.of("Brazil/East")).compareTo(this.validade) > 0)
+            return false;
+
+        return true;
+    }
 
     public abstract TipoCartao getTipo();
 
@@ -142,6 +160,10 @@ public abstract class Cartao {
         this.dataCriacao = dataCriacao;
     }
 
+    public YearMonth getValidade() { return validade; }
+
+    public void setValidade(YearMonth validade) { this.validade = validade;}
+
     public boolean isAtivo() {
         return ativo;
     }
@@ -177,4 +199,7 @@ public abstract class Cartao {
     public static int getNumeroLength(){ return NUMERO_LENGTH; }
 
     public static int getCodigoSegurancaLength(){ return CODIGO_SEGURANÇA_LENGTH; }
+
+    public static int getValidadeEmAnos(){ return VALIDADE_EM_ANOS; };
+
 }

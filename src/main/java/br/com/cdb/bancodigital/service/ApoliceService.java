@@ -12,6 +12,7 @@ import br.com.cdb.bancodigital.repository.CartaoRepository;
 import br.com.cdb.bancodigital.repository.SeguroRepository;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import br.com.cdb.bancodigital.service.exception.OperacaoProibidaException;
+import br.com.cdb.bancodigital.service.exception.PagamentoInvalidoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,13 @@ public class ApoliceService {
         Seguro seguro = seguroOPT.orElseThrow(
                 () -> new EntidadeNaoEncontradaException("Seguro informado não encontrado")
         );
+
+        if(!cartao.isAtivo())
+            throw new OperacaoProibidaException("Cartão informado está inativo");
+
+        if(!cartao.isValido()){
+            throw new OperacaoProibidaException("Cartão informado está com a validade expirada");
+        }
 
         if(!cartao.getTipo().equals(TipoCartao.CREDITO)){
             throw new OperacaoProibidaException("Apenas cartão de crédito pode fazer um contrato de seguro");

@@ -1,11 +1,13 @@
 package br.com.cdb.bancodigital.dto.cartao;
 
 import br.com.cdb.bancodigital.dto.formatters.NumeroCartaoFormatter;
+import br.com.cdb.bancodigital.dto.formatters.YearMonthFormatter;
 import br.com.cdb.bancodigital.entity.Cartao;
 import br.com.cdb.bancodigital.entity.Conta;
 import jakarta.persistence.Column;
 
 import java.math.BigDecimal;
+import java.time.YearMonth;
 
 public class CartaoMinDTO {
 
@@ -13,6 +15,8 @@ public class CartaoMinDTO {
     private String numero;
 
     private String nomeDono;
+
+    private String validade;
 
     private String codigoSeguranca;
 
@@ -28,6 +32,7 @@ public class CartaoMinDTO {
         this.id = cartao.getId();
         this.numero = NumeroCartaoFormatter.formatar(cartao);
         this.nomeDono = cartao.getNomeDono();
+        this.validade = YearMonthFormatter.formatar(cartao.getValidade());
         this.codigoSeguranca = cartao.getCodigoSeguranca();
         this.tipo = cartao.getTipo().name();
         this.limite = cartao.getLimite();
@@ -57,6 +62,10 @@ public class CartaoMinDTO {
     public void setNomeDono(String nomeDono) {
         this.nomeDono = nomeDono;
     }
+
+    public String getValidade() { return validade; }
+
+    public void setValidade(YearMonth validade) { this.validade = YearMonthFormatter.formatar(validade); }
 
     public String getCodigoSeguranca() {
         return codigoSeguranca;

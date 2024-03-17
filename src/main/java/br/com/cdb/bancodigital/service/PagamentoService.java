@@ -42,6 +42,12 @@ public class PagamentoService {
                 () -> new EntidadeNaoEncontradaException("Cartão não encontrado")
         );
 
+        if(!cartao.isAtivo())
+            throw new PagamentoInvalidoException("Cartão informado está inativo");
+
+        if(!cartao.isValido())
+            throw new PagamentoInvalidoException("Cartão informado está com a validade expirada");
+
         if( cartao instanceof CartaoDebito && qtdParcelas > 1){
             throw new PagamentoInvalidoException("Cartão de débito só pode ter uma parcela");
         }

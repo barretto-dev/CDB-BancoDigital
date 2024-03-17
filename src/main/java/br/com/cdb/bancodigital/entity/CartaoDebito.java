@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 @Entity
 @Table(name = "cartao_debito")
@@ -20,9 +21,9 @@ public class CartaoDebito extends Cartao {
 
     public CartaoDebito() {}
 
-    public CartaoDebito(String nomeDono, String codigoSeguranca, String senha, LocalDate dataCriacao,
-                        boolean ativo, Conta conta, BigDecimal limiteDiario) {
-        super(nomeDono, codigoSeguranca, senha, dataCriacao, ativo, conta);
+    public CartaoDebito(String nomeDono, String codigoSeguranca, YearMonth validade, String senha,
+                        LocalDate dataCriacao, boolean ativo, Conta conta, BigDecimal limiteDiario) {
+        super(nomeDono, codigoSeguranca, senha, validade, dataCriacao, ativo, conta);
         this.limiteDiario = limiteDiario;
     }
 

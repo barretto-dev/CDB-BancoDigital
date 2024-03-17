@@ -52,6 +52,7 @@ public class TranferenciaPixService {
         return new TransferenciaPixDTO(transferenciaPix);
     }
 
+    @Transactional(readOnly = true)
     public Page<TransferenciaPixDTO> findAllByCartaoId(Long contaId, PageRequest pageRequest) {
 
         Optional<Conta> contaOpt = contaRepository.findById(contaId);

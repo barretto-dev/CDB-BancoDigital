@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 @Entity
@@ -22,9 +23,9 @@ public class CartaoCredito extends Cartao{
 
     public CartaoCredito(){}
 
-    public CartaoCredito(String nomeDono, String codigoSeguranca, String senha, LocalDate dataCriacao,
-                         boolean ativo, Conta conta, BigDecimal limiteMensal) {
-        super(nomeDono, codigoSeguranca, senha, dataCriacao, ativo, conta);
+    public CartaoCredito(String nomeDono, String codigoSeguranca, String senha, YearMonth validade,
+                         LocalDate dataCriacao, boolean ativo, Conta conta, BigDecimal limiteMensal) {
+        super(nomeDono, codigoSeguranca, senha, validade, dataCriacao, ativo, conta);
         this.limiteMensal = limiteMensal;
     }
 
