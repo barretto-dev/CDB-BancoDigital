@@ -41,4 +41,13 @@ public class TranferenciaPixService {
 
     }
 
+    @Transactional(readOnly = true)
+    public TransferenciaPixDTO findById(Long id){
+        Optional<TransferenciaPix> transferenciaPixOpt = repository.findById(id);
+        TransferenciaPix transferenciaPix = transferenciaPixOpt.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Transferência via pix informada não foi encontrada")
+        );
+        return new TransferenciaPixDTO(transferenciaPix);
+    }
+
 }
