@@ -32,7 +32,7 @@ public class PagamentoService {
     @Transactional
     public boolean create(PagamentoDTO dto){
 
-        String remetente = dto.getRemetente();
+        String remetente = dto.getDestinatario();
         BigDecimal valor = dto.getValor();
         Integer qtdParcelas = dto.getQtdParcelas();
         Long cartaoId = dto.getCartaoId();

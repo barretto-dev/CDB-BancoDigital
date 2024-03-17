@@ -34,6 +34,9 @@ public abstract class Conta {
     @OneToMany(mappedBy = "conta")
     private List<Cartao> cartoes;
 
+    @OneToMany(mappedBy = "conta")
+    private List<TransferenciaPix> transferenciasPix;
+
     public Conta() {}
 
     public Conta(Long id, String agencia, BigDecimal saldo, Cliente dono) {
@@ -54,15 +57,13 @@ public abstract class Conta {
         this.saldo = saldo.setScale(2,RoundingMode.UP);;
     }
 
-    public boolean transferirPix(Conta destino, BigDecimal valor){
+    public boolean transferirPix(BigDecimal valor){
         BigDecimal saldoFinalOrigem = getSaldo().subtract(valor);
-        BigDecimal saldoFinalDestino = destino.getSaldo().add(valor);
 
         if(saldoFinalOrigem.compareTo(BigDecimal.ZERO) < 0)
             return false;
 
         setSaldo(saldoFinalOrigem);
-        destino.setSaldo(saldoFinalDestino);
         return true;
     }
 
@@ -109,4 +110,12 @@ public abstract class Conta {
     public List<Cartao> getCartoes() { return cartoes; }
 
     public void setCartoes(List<Cartao> cartoes) { this.cartoes = cartoes; }
+
+    public List<TransferenciaPix> getTransferenciasPix() {
+        return transferenciasPix;
+    }
+
+    public void setTransferenciasPix(List<TransferenciaPix> transferenciasPix) {
+        this.transferenciasPix = transferenciasPix;
+    }
 }

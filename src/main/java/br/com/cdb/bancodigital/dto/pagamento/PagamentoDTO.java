@@ -1,33 +1,29 @@
 package br.com.cdb.bancodigital.dto.pagamento;
 
-import br.com.cdb.bancodigital.entity.Pagamento;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 public class PagamentoDTO {
 
-    private String remetente;
+    private String destinatario;
     private BigDecimal valor;
     private Integer qtdParcelas;
     private Long cartaoId;
 
     public PagamentoDTO(){}
 
-    public PagamentoDTO(String remetente, BigDecimal valor, Integer qtdParcelas, Long cartaoId) {
-        this.remetente = remetente;
+    public PagamentoDTO(String destinatario, BigDecimal valor, Integer qtdParcelas, Long cartaoId) {
+        this.destinatario = destinatario;
         this.valor = valor;
         this.qtdParcelas = qtdParcelas;
         this.cartaoId = cartaoId;
     }
 
-    public String getRemetente() {
-        return remetente;
+    public String getDestinatario() {
+        return destinatario;
     }
 
-    public void setRemetente(String remetente) {
-        this.remetente = remetente;
+    public void setDestinatario(String destinatario) {
+        this.destinatario = destinatario;
     }
 
     public BigDecimal getValor() {

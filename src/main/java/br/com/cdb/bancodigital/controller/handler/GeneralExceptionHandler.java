@@ -63,6 +63,18 @@ public class GeneralExceptionHandler {
         return ResponseEntity.status(status).body(msgError);
     }
 
+    @ExceptionHandler(TransferenciaPixInvalidaException.class)
+    public ResponseEntity<MensagemDeErro> transferenciaInvalida(TransferenciaPixInvalidaException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        MensagemDeErro msgError = new MensagemDeErro();
+        msgError.setStatus(status.value());
+        msgError.setMensagem(e.getMessage());
+        msgError.setCaminho(request.getRequestURI());
+
+        return ResponseEntity.status(status).body(msgError);
+    }
+
     @ExceptionHandler(OperacaoProibidaException.class)
     public ResponseEntity<MensagemDeErro> operacaoProibida(OperacaoProibidaException e, HttpServletRequest request){
         HttpStatus status = HttpStatus.FORBIDDEN;

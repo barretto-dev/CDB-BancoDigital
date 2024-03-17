@@ -14,8 +14,8 @@ public class Pagamento {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "remetente", nullable = false)
-    private String remetente;
+    @Column(name = "destinatario", nullable = false)
+    private String destinatario;
 
     @Column(name = "valor", nullable = false)
     private BigDecimal valor;
@@ -35,9 +35,9 @@ public class Pagamento {
 
     public Pagamento() {}
 
-    public Pagamento(String remetente, BigDecimal valor, Integer parcelaAtual,
+    public Pagamento(String destinatario, BigDecimal valor, Integer parcelaAtual,
                      Integer parcelaTotal, LocalDateTime data, Cartao cartao) {
-        this.remetente = remetente;
+        this.destinatario = destinatario;
         this.valor = valor;
         this.parcelaAtual = parcelaAtual;
         this.parcelaTotal = parcelaTotal;
@@ -51,6 +51,14 @@ public class Pagamento {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDestinatario() {
+        return destinatario;
+    }
+
+    public void setDestinatario(String destinatario) {
+        this.destinatario = destinatario;
     }
 
     public BigDecimal getValor() {
