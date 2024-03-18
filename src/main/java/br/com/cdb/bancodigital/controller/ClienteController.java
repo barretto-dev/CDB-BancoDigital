@@ -1,5 +1,6 @@
 package br.com.cdb.bancodigital.controller;
 
+import br.com.cdb.bancodigital.dto.cliente.ClienteCreateDTO;
 import br.com.cdb.bancodigital.service.ClienteService;
 import br.com.cdb.bancodigital.dto.cliente.ClienteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class ClienteController {
     }
 
     @PostMapping()
-    public ResponseEntity<ClienteDTO> create(@RequestBody ClienteDTO dto) {
+    public ResponseEntity<ClienteDTO> create(@RequestBody ClienteCreateDTO dto) {
         ClienteDTO novoCliente = clienteService.create(dto.toCliente());
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -50,7 +51,7 @@ public class ClienteController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ClienteDTO> update(@PathVariable Long id, @RequestBody ClienteDTO dto) {
+    public ResponseEntity<ClienteDTO> update(@PathVariable Long id, @RequestBody ClienteCreateDTO dto) {
         ClienteDTO clienteAtualizado = clienteService.update(id,dto.toCliente());
         return ResponseEntity.status(204).body(clienteAtualizado);
     }

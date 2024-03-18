@@ -24,6 +24,8 @@ public class CartaoMinDTO {
 
     private BigDecimal limite;
 
+    private boolean ativo;
+
     private Long contaId;
 
     public CartaoMinDTO(){}
@@ -36,6 +38,7 @@ public class CartaoMinDTO {
         this.codigoSeguranca = cartao.getCodigoSeguranca();
         this.tipo = cartao.getTipo().name();
         this.limite = cartao.getLimite();
+        this.ativo = cartao.isAtivo();
         this.contaId = cartao.getConta().getId();
     }
 
@@ -86,6 +89,10 @@ public class CartaoMinDTO {
     public void setLimite(BigDecimal limite) {
         this.limite = limite;
     }
+
+    public boolean isAtivo() { return ativo; }
+
+    public void setAtivo(boolean ativo) { this.ativo = ativo; }
 
     public Long getContaId() {
         return contaId;

@@ -11,6 +11,7 @@ import br.com.cdb.bancodigital.repository.TaxaCartaoRepository;
 import br.com.cdb.bancodigital.service.encrypt.PasswordEncoder;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import br.com.cdb.bancodigital.service.exception.OperacaoProibidaException;
+import br.com.cdb.bancodigital.service.exception.PagamentoInvalidoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,7 @@ public class CartaoService {
     public CartaoMinDTO findById(Long id){
         Optional<Cartao> cartaoOPT = repository.findById(id);
         Cartao cartao = cartaoOPT.orElseThrow(
-                () -> new EntidadeNaoEncontradaException("Cartão informada não encontrada")
+                () -> new EntidadeNaoEncontradaException("Cartão informado não encontrado")
         );
         return new CartaoMinDTO(cartao);
     }
@@ -52,16 +53,58 @@ public class CartaoService {
     public CartaoMinDTO updateLimite(Long id, BigDecimal limite){
         Optional<Cartao> cartaoOPT = repository.findById(id);
         Cartao cartao = cartaoOPT.orElseThrow(
-                () -> new EntidadeNaoEncontradaException("Cartão informada não encontrada")
+                () -> new EntidadeNaoEncontradaException("Cartão informado não encontrado")
         );
 
         if(!cartao.getTipo().equals(TipoCartao.DEBITO))
             throw new OperacaoProibidaException("Apenas cartões de debito podem alterar o limite");
 
+        if(!cartao.isAtivo())
+            throw new OperacaoProibidaException("Cartão informado está inativo");
+
+        if(!cartao.isValido())
+            throw new PagamentoInvalidoException("Cartão informado está com a validade expirada");
+
         cartao.setLimite(limite);
 
         cartao = repository.save(cartao);
         return new CartaoMinDTO(cartao);
+    }
+
+    @Transactional()
+    public void updateSenha(Long id, String senhaAtual, String senhaNova){
+        Optional<Cartao> cartaoOPT = repository.findById(id);
+        Cartao cartao = cartaoOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Cartão informado não encontrado")
+        );
+
+        if(!cartao.isAtivo())
+            throw new OperacaoProibidaException("Cartão informado está inativo");
+
+        if(!cartao.isValido())
+            throw new PagamentoInvalidoException("Cartão informado está com a validade expirada");
+
+        if( !PasswordEncoder.matches(senhaAtual, cartao.getSenha()) )
+            throw new OperacaoProibidaException("A senha atual informada está incorreta");
+
+        cartao.setSenha(PasswordEncoder.encrypt(senhaNova));
+        repository.save(cartao);
+    }
+
+    @Transactional()
+    public CartaoMinDTO updateAtividade(Long id, boolean ativo){
+        Optional<Cartao> cartaoOPT = repository.findById(id);
+        Cartao cartao = cartaoOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Cartão informado não encontrada")
+        );
+
+        if(!cartao.isValido() && ativo)
+            throw new PagamentoInvalidoException("Cartão informado está com a validade expirada, logo não pode ser reativado");
+
+        cartao.setAtivo(ativo);
+        cartao = repository.save(cartao);
+        return new CartaoMinDTO(cartao);
+
     }
 
     @Transactional

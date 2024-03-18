@@ -39,7 +39,7 @@ public class PagamentoService {
 
         Optional<Cartao> cartaoOPT = cartaoRepository.findById(cartaoId);
         Cartao cartao = cartaoOPT.orElseThrow(
-                () -> new EntidadeNaoEncontradaException("Cartão não encontrado")
+                () -> new EntidadeNaoEncontradaException("Cartão infomado não encontrado")
         );
 
         if(!cartao.isAtivo())

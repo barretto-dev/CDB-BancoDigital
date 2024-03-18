@@ -1,51 +1,32 @@
 package br.com.cdb.bancodigital.dto.cliente;
 
-import br.com.cdb.bancodigital.dto.formatters.LocalDateFormatter;
 import br.com.cdb.bancodigital.entity.Cliente;
 import br.com.cdb.bancodigital.entity.enums.TipoCliente;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
-import java.util.stream.Stream;
 
-public class ClienteDTO {
+public class ClienteCreateDTO {
 
-    private Long id;
     private String nome;
     private String cpf;
     private String endereco;
-    private String dataNascimento;
+    private LocalDate dataNascimento;
     @NotEmpty
     private TipoCliente tipo;
 
-    public ClienteDTO() {
-    }
+    public ClienteCreateDTO(){}
 
-    public ClienteDTO(Long id, String nome, String cpf, String endereco, LocalDate dataNascimento, TipoCliente tipo) {
-        this.id = id;
+    public ClienteCreateDTO(String nome, String cpf, String endereco, LocalDate dataNascimento, TipoCliente tipo) {
         this.nome = nome;
         this.cpf = cpf;
         this.endereco = endereco;
-        this.dataNascimento = LocalDateFormatter.formatar(dataNascimento);
+        this.dataNascimento = dataNascimento;
         this.tipo = tipo;
     }
 
-    public ClienteDTO(Cliente cliente) {
-        this.id = cliente.getId();
-        this.nome = cliente.getNome();
-        this.cpf = cliente.getCpf();
-        this.endereco = cliente.getEndereco();
-        this.dataNascimento = LocalDateFormatter.formatar(cliente.getDataNascimento());
-        this.tipo = cliente.getTipo();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public Cliente toCliente() {
+        return new Cliente(nome, cpf, endereco, dataNascimento, tipo);
     }
 
     public String getNome() {
@@ -72,12 +53,12 @@ public class ClienteDTO {
         this.endereco = endereco;
     }
 
-    public String getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
     public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = LocalDateFormatter.formatar(dataNascimento);;
+        this.dataNascimento = dataNascimento;
     }
 
     public TipoCliente getTipo() {
