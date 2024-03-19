@@ -3,6 +3,7 @@ package br.com.cdb.bancodigital.controller;
 import br.com.cdb.bancodigital.dto.cliente.ClienteDTO;
 import br.com.cdb.bancodigital.dto.conta.ContaCreateDTO;
 import br.com.cdb.bancodigital.dto.conta.ContaDTO;
+import br.com.cdb.bancodigital.dto.conta.ContaUpdateSaldoDTO;
 import br.com.cdb.bancodigital.entity.Conta;
 import br.com.cdb.bancodigital.service.ClienteService;
 import br.com.cdb.bancodigital.service.ContaService;
@@ -62,11 +63,15 @@ public class ContaController {
         return ResponseEntity.created(uri).body(novaConta);
 
     }
-//    @PutMapping(value = "/{id}")
-//    public ResponseEntity<ContaDTO> update(@PathVariable Long id, @RequestBody ContaDTO dto) {
-//        ContaDTO contaAtualizada = service.update(id,dto.toConta());
-//        return ResponseEntity.status(204).body(contaAtualizada);
-//    }
+    @PutMapping(value = "/{id}/adicionarSaldo")
+    public ResponseEntity<HashMap<String,BigDecimal>> addSaldo(@PathVariable Long id, @RequestBody ContaUpdateSaldoDTO dto) {
+        ContaDTO contaAtualizada = service.addSaldo(id,dto.getSaldo());
+
+        HashMap<String, BigDecimal> result = new HashMap<String, BigDecimal>();
+        result.put("Saldo", contaAtualizada.getSaldo());
+
+        return ResponseEntity.ok(result);
+    }
 
 
 }

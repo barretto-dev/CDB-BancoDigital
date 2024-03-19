@@ -18,6 +18,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 @Service
@@ -47,17 +49,30 @@ public class ContaService {
         return lista.map(conta -> new ContaDTO(conta));
     }
 
-    @Transactional
-    public ContaDTO update(Long id, Conta conta) {
-        try {
-            repository.updateAlter(id,conta.getTipo().getCodigo(),conta.getSaldo());
-            Conta contaAtualizada = repository.findById(id).get();
-            return new ContaDTO(contaAtualizada);
+    public ContaDTO addSaldo(Long id, BigDecimal saldoAdicional){
+        Optional<Conta> contaOPT = repository.findById(id);
+        Conta conta = contaOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Conta informada não encontrada")
+        );
+        BigDecimal saldoAntigo = conta.getSaldo();
+        BigDecimal novoSaldo = saldoAntigo.add(saldoAdicional).setScale( 2, RoundingMode.DOWN);
+        conta.setSaldo(novoSaldo);
 
-        } catch (EntityNotFoundException e) {
-            throw new EntidadeNaoEncontradaException("Não existe conta com o id=" + id);
-        }
+        conta = repository.save(conta);
+        return new ContaDTO(conta);
     }
+
+//    @Transactional
+//    public ContaDTO update(Long id, Conta conta) {
+//        try {
+//            repository.updateAlter(id,conta.getTipo().getCodigo(),conta.getSaldo());
+//            Conta contaAtualizada = repository.findById(id).get();
+//            return new ContaDTO(contaAtualizada);
+//
+//        } catch (EntityNotFoundException e) {
+//            throw new EntidadeNaoEncontradaException("Não existe conta com o id=" + id);
+//        }
+//    }
 
     @Transactional
     public ContaDTO create(Conta novaConta, Long donoId){
