@@ -24,7 +24,8 @@ public class ContaCorrente extends Conta{
         super(agencia, saldo);
     }
 
-    public boolean pagarTaxaMensal(){
+    //aplicação da mensalidade da contra corrente
+    public boolean aplicarTaxa(){
         BigDecimal taxaMensal = getTaxa().getValor();
         BigDecimal saldoFinal = getSaldo().subtract(taxaMensal);
         if(saldoFinal.compareTo(BigDecimal.ZERO) < 0)

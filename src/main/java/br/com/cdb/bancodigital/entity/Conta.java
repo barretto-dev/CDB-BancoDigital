@@ -75,6 +75,8 @@ public abstract class Conta {
         return true;
     }
 
+    public abstract boolean aplicarTaxa();
+
     public abstract TipoConta getTipo();
 
     public Long getId() {

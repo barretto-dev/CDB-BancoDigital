@@ -73,5 +73,25 @@ public class ContaController {
         return ResponseEntity.ok(result);
     }
 
+    @PutMapping(value = "/{id}/aplicarMensalidade")
+    public ResponseEntity<HashMap<String,BigDecimal>> applyMensalidade(@PathVariable Long id) {
+        ContaDTO contaAtualizada = service.applyMensalidade(id);
+
+        HashMap<String, BigDecimal> result = new HashMap<String, BigDecimal>();
+        result.put("Saldo", contaAtualizada.getSaldo());
+
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping(value = "/{id}/aplicarRendimento")
+    public ResponseEntity<HashMap<String,BigDecimal>> applyRendimento(@PathVariable Long id) {
+        ContaDTO contaAtualizada = service.applyRendimento(id);
+
+        HashMap<String, BigDecimal> result = new HashMap<String, BigDecimal>();
+        result.put("Saldo", contaAtualizada.getSaldo());
+
+        return ResponseEntity.ok(result);
+    }
+
 
 }

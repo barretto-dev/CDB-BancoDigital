@@ -1,5 +1,5 @@
 INSERT INTO taxa_conta(tipo, valor) VALUES ( 'MENSALIDADE_PADRAO', 31.25 );
-INSERT INTO taxa_conta(tipo, valor) VALUES ( 'RENDIMENTO_PADRAO', 11.25 );
+INSERT INTO taxa_conta(tipo, valor) VALUES ( 'RENDIMENTO_PADRAO', 0.50 );
 
 INSERT INTO taxa_cartao(tipo, valor) VALUES ( 'DEBITO', 2.0 );
 INSERT INTO taxa_cartao(tipo, valor) VALUES ( 'CREDITO', 4.0 );

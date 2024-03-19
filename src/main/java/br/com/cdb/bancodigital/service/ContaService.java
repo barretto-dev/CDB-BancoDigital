@@ -11,6 +11,7 @@ import br.com.cdb.bancodigital.repository.ClienteRepository;
 import br.com.cdb.bancodigital.repository.ContaRepository;
 import br.com.cdb.bancodigital.repository.TaxaContaRepository;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
+import br.com.cdb.bancodigital.service.exception.OperacaoProibidaException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -49,6 +50,7 @@ public class ContaService {
         return lista.map(conta -> new ContaDTO(conta));
     }
 
+    @Transactional(readOnly = true)
     public ContaDTO addSaldo(Long id, BigDecimal saldoAdicional){
         Optional<Conta> contaOPT = repository.findById(id);
         Conta conta = contaOPT.orElseThrow(
@@ -60,6 +62,38 @@ public class ContaService {
 
         conta = repository.save(conta);
         return new ContaDTO(conta);
+    }
+
+    @Transactional(readOnly = true)
+    public ContaDTO applyMensalidade(Long id){
+        Optional<Conta> contaOPT = repository.findById(id);
+        Conta conta = contaOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Conta informada não encontrada")
+        );
+
+        if(conta.getTipo().compareTo(TipoConta.CORRENTE) != 0)
+            throw new OperacaoProibidaException("Apenas uma conta corrente está sujeita à taxa de mensalidade");
+
+        conta.aplicarTaxa();
+        conta = repository.save(conta);
+        return new ContaDTO(conta);
+
+    }
+
+    @Transactional(readOnly = true)
+    public ContaDTO applyRendimento(Long id){
+        Optional<Conta> contaOPT = repository.findById(id);
+        Conta conta = contaOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Conta informada não encontrada")
+        );
+
+        if(conta.getTipo().compareTo(TipoConta.POUPANCA) != 0)
+            throw new OperacaoProibidaException("Apenas uma conta poupança está sujeita à taxa de rendimento");
+
+        conta.aplicarTaxa();
+        conta = repository.save(conta);
+        return new ContaDTO(conta);
+
     }
 
 //    @Transactional

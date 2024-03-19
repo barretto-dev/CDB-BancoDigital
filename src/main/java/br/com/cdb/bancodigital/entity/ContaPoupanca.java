@@ -23,13 +23,15 @@ public class ContaPoupanca extends Conta{
         super(agencia, saldo);
     }
 
-    public void aplicarRendimento(BigDecimal taxaRendimento){
+    //aplicar taxa de rendimento da conta corrente
+    public boolean aplicarTaxa(){
         BigDecimal taxa = getTaxa().getValor();
         BigDecimal rendimento = BigDecimal.ONE.add(
                 taxa.divide(new BigDecimal("100.00"), 5, RoundingMode.UP)
         );
         BigDecimal novoSaldo = getSaldo().multiply(rendimento);
         setSaldo(novoSaldo);
+        return true;
     }
 
     @Override
