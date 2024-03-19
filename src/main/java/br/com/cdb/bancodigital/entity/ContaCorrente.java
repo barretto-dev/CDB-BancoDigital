@@ -13,8 +13,8 @@ import java.math.RoundingMode;
 public class ContaCorrente extends Conta{
 
     public ContaCorrente(){}
-    public ContaCorrente(Long id, String agencia, BigDecimal saldo, Cliente dono) {
-        super(id, agencia, saldo, dono);
+    public ContaCorrente(Long id, String numero, String agencia, BigDecimal saldo, Cliente dono) {
+        super(id, numero, agencia, saldo, dono);
     }
     public ContaCorrente(String agencia, BigDecimal saldo, Cliente dono) {
         super(agencia, saldo, dono);

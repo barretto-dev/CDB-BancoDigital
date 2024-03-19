@@ -9,45 +9,25 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class ContaDTO {
+public class ContaCreateDTO {
 
-    private Long id;
-    private String numero;
     private String agencia;
     private BigDecimal saldo;
     @NotNull
     private TipoConta tipo;
     private Long donoId;
 
-    public ContaDTO (Long id, BigDecimal saldo, TipoConta tipo, Long donoId){
-        this.id = id;
-        this.saldo = saldo.setScale(2,RoundingMode.UP);
+    public ContaCreateDTO (BigDecimal saldo, TipoConta tipo, Long donoId){
+        this.saldo = saldo.setScale(2, RoundingMode.UP);
         this.tipo = tipo;
         this.donoId = donoId;
     }
-    public ContaDTO (Conta conta){
-        this.id = conta.getId();
-        this.numero = conta.getNumero();
-        this.agencia = conta.getAgencia();
-        this.saldo = conta.getSaldo();
-        this.tipo = conta.getTipo();
-        this.donoId = conta.getDono().getId();
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public Conta toConta(){
+        if(tipo.equals(TipoConta.POUPANCA)){
+            return new ContaPoupanca(agencia,saldo);
+        }
+        return new ContaCorrente(agencia,saldo);
     }
 
     public String getAgencia() {
@@ -59,11 +39,11 @@ public class ContaDTO {
     }
 
     public BigDecimal getSaldo() {
-        return saldo.setScale(2, RoundingMode.UP);
+        return saldo;
     }
 
     public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo.setScale(2, RoundingMode.UP);
+        this.saldo = saldo;
     }
 
     public TipoConta getTipo() {
@@ -77,6 +57,7 @@ public class ContaDTO {
     public Long getDonoId() {
         return donoId;
     }
+
     public void setDonoId(Long donoId) {
         this.donoId = donoId;
     }

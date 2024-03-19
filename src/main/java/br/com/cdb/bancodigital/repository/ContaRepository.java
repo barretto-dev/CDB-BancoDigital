@@ -13,4 +13,7 @@ public interface ContaRepository extends JpaRepository<Conta,Long>{
     @Modifying
     @Query(nativeQuery = true, value="UPDATE Conta SET tipo = :tipo, saldo = :saldo WHERE id = :id")
     public Conta updateAlter(Long id, String tipo, BigDecimal saldo);
+
+    @Query("SELECT c FROM Conta c ORDER BY c.id DESC LIMIT 1")
+    public Conta findLastConta();
 }

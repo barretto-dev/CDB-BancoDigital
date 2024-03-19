@@ -1,7 +1,9 @@
 package br.com.cdb.bancodigital.controller;
 
 import br.com.cdb.bancodigital.dto.cliente.ClienteDTO;
+import br.com.cdb.bancodigital.dto.conta.ContaCreateDTO;
 import br.com.cdb.bancodigital.dto.conta.ContaDTO;
+import br.com.cdb.bancodigital.entity.Conta;
 import br.com.cdb.bancodigital.service.ClienteService;
 import br.com.cdb.bancodigital.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.net.URI;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping(value = "/conta")
@@ -39,9 +43,17 @@ public class ContaController {
     public ResponseEntity<ContaDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok().body(service.findById(id));
     }
+    @GetMapping(value = "/{id}/mostrarSaldo")
+    public ResponseEntity<HashMap<String,BigDecimal>> getSaldo(@PathVariable Long id){
+        ContaDTO contaDTO = service.findById(id);
+
+        HashMap<String, BigDecimal> result = new HashMap<String, BigDecimal>();
+        result.put("Saldo", contaDTO.getSaldo());
+        return ResponseEntity.ok(result);
+    }
 
     @PostMapping
-    public ResponseEntity<ContaDTO> create(@RequestBody ContaDTO dto){
+    public ResponseEntity<ContaDTO> create(@RequestBody ContaCreateDTO dto){
         ContaDTO novaConta = service.create(dto.toConta(), dto.getDonoId());
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -50,11 +62,11 @@ public class ContaController {
         return ResponseEntity.created(uri).body(novaConta);
 
     }
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<ContaDTO> update(@PathVariable Long id, @RequestBody ContaDTO dto) {
-        ContaDTO contaAtualizada = service.update(id,dto.toConta());
-        return ResponseEntity.status(204).body(contaAtualizada);
-    }
+//    @PutMapping(value = "/{id}")
+//    public ResponseEntity<ContaDTO> update(@PathVariable Long id, @RequestBody ContaDTO dto) {
+//        ContaDTO contaAtualizada = service.update(id,dto.toConta());
+//        return ResponseEntity.status(204).body(contaAtualizada);
+//    }
 
 
 }
