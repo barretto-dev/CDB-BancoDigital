@@ -5,6 +5,7 @@ import br.com.cdb.bancodigital.entity.Cartao;
 import br.com.cdb.bancodigital.entity.CartaoCredito;
 import br.com.cdb.bancodigital.entity.CartaoDebito;
 import br.com.cdb.bancodigital.entity.Pagamento;
+import br.com.cdb.bancodigital.entity.enums.TipoCartao;
 import br.com.cdb.bancodigital.repository.CartaoRepository;
 import br.com.cdb.bancodigital.repository.PagamentoRepository;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
@@ -52,9 +53,9 @@ public class PagamentoService {
             throw new PagamentoInvalidoException("Cartão de débito só pode ter uma parcela");
         }
 
-        //Verificar se a conta do cartao possui saldo para pagamento
-        boolean podeSerPago = cartao.realizarPagamento(valor);
-        if(!podeSerPago)
+
+        boolean isSaldoNegativo = cartao.realizarPagamento(valor);
+        if(!isSaldoNegativo && cartao.getTipo().compareTo(TipoCartao.DEBITO) == 0)
             throw new PagamentoInvalidoException("Saldo insuficiente na conta para realizar pagamento");
 
         LocalDateTime dateNow = LocalDateTime.now(ZoneId.of("Brazil/East"));

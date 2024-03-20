@@ -15,6 +15,7 @@ import br.com.cdb.bancodigital.service.exception.OperacaoProibidaException;
 import br.com.cdb.bancodigital.service.exception.PagamentoInvalidoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -30,6 +31,7 @@ public class ApoliceService {
     @Autowired
     SeguroRepository seguroRepository;
 
+    @Transactional(readOnly = true)
     public ApoliceDTO findByNumero(String numero){
         Apolice apolice = repository.findApoliceByNumero(numero);
         if(apolice == null)
@@ -38,6 +40,7 @@ public class ApoliceService {
         return new ApoliceDTO(apolice);
     }
 
+    @Transactional()
     public ApoliceDTO create(ApoliceCreateDTO dto){
 
         Optional<Cartao> cartaoOPT = cartaoRepository.findById(dto.getCartaoId());
@@ -70,6 +73,8 @@ public class ApoliceService {
 
         Apolice novaApolice = new Apolice((CartaoCredito) cartao,seguro,numero, dto.getValor());
         novaApolice = repository.save(novaApolice);
+        ((CartaoCredito) cartao).pagarApolice(novaApolice);
+
         return new ApoliceDTO(novaApolice);
 
     }

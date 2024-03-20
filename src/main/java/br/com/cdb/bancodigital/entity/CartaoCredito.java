@@ -29,6 +29,13 @@ public class CartaoCredito extends Cartao{
         this.limiteMensal = limiteMensal;
     }
 
+    public void pagarApolice(Apolice apolice){
+        BigDecimal valorApolice = apolice.getValor();
+        Conta conta = this.getConta();
+        BigDecimal novoSaldo = conta.getSaldo().min(valorApolice).setScale(2,RoundingMode.DOWN);
+        conta.setSaldo(novoSaldo);
+    }
+
     public CartaoCredito(String nomeDono, String senha, boolean ativo){
         setNomeDono(nomeDono);
         setSenha(senha);
