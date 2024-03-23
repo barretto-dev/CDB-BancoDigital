@@ -13,6 +13,9 @@ import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import br.com.cdb.bancodigital.service.exception.OperacaoProibidaException;
 import br.com.cdb.bancodigital.service.exception.PagamentoInvalidoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +53,17 @@ public class CartaoService {
                 () -> new EntidadeNaoEncontradaException("Cartão informado não encontrado")
         );
         return new CartaoMinDTO(cartao);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CartaoMinDTO> findByConta(Long contaId, PageRequest pageRequest){
+        Optional<Conta> contaOPT = contaRepository.findById(contaId);
+        Conta conta = contaOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Conta informada não encontrada")
+        );
+
+        Page<Cartao> page = repository.findByConta(contaId,pageRequest);
+        return page.map( cartao -> new CartaoMinDTO(cartao));
     }
 
     @Transactional()
