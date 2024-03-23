@@ -43,17 +43,25 @@ public class ClienteService {
         Page<Cliente> lista = clienteRepository.findAll(page);
         return lista.map(cliente -> new ClienteDTO(cliente));
     }
-
-    @Transactional
+    
     public ClienteDTO create(Cliente cliente) {
-        Cliente novoCliente = clienteRepository.save(cliente);
-        return new ClienteDTO(novoCliente);
-    }
+        try {
+            Cliente novoCliente = clienteRepository.save(cliente);
+            return new ClienteDTO(novoCliente);
+        }catch (DataIntegrityViolationException e ){
+            throw new BancoDeDadosException(
+                    "Cpf informado já está sendo usado por outro cliente"
+            );
+        }
 
-    @Transactional
+
+    }
     public ClienteDTO update(Long id, Cliente cliente) {
         try {
-            Cliente clienteAtualizado = clienteRepository.getReferenceById(id);
+            Optional<Cliente> clienteOPT = clienteRepository.findById(id);
+            Cliente clienteAtualizado = clienteOPT.orElseThrow(
+                    () -> new EntidadeNaoEncontradaException("Cliente não encontrado")
+            );
 
             clienteAtualizado.setCpf(cliente.getCpf());
             clienteAtualizado.setNome(cliente.getNome());
@@ -63,8 +71,9 @@ public class ClienteService {
 
             clienteAtualizado = clienteRepository.save(clienteAtualizado);
             return new ClienteDTO(clienteAtualizado);
-        } catch (EntityNotFoundException e) {
-            throw new EntidadeNaoEncontradaException("Não existe cliente com o id=" + id);
+
+        }catch (DataIntegrityViolationException e) {
+            throw new BancoDeDadosException( "Cpf informado já está sendo usado por outro cliente" );
         }
     }
 
