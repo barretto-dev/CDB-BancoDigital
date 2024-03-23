@@ -14,6 +14,8 @@ import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import br.com.cdb.bancodigital.service.exception.OperacaoProibidaException;
 import br.com.cdb.bancodigital.service.exception.PagamentoInvalidoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +40,20 @@ public class ApoliceService {
             throw new EntidadeNaoEncontradaException("Apolice informada não foi encontrada");
 
         return new ApoliceDTO(apolice);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ApoliceDTO> findApolicesByCartao(Long cartaoId, PageRequest pageRequest){
+        Optional<Cartao> cartaoOPT = cartaoRepository.findById(cartaoId);
+        Cartao cartao = cartaoOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Cartão informado não encontrado")
+        );
+
+        if(cartao.getTipo().compareTo(TipoCartao.CREDITO) != 0)
+            throw new OperacaoProibidaException("Apenas cartão de crédito possui uma lista de apólices");
+
+        Page<Apolice> page = repository.findApolicesByCartao(cartaoId,pageRequest);
+        return page.map( apolice -> new ApoliceDTO(apolice));
     }
 
     @Transactional()

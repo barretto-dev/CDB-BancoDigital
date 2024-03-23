@@ -1,6 +1,8 @@
 package br.com.cdb.bancodigital.repository;
 
 import br.com.cdb.bancodigital.entity.Apolice;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,5 +17,5 @@ public interface ApoliceRepository extends JpaRepository<Apolice, Long> {
     public Apolice findLastApolice();
 
     @Query("SELECT a FROM Apolice a WHERE a.cartaoCredito.id = :cartaoId")
-    public List<Apolice> findApolicesByCartaoId(Long cartaoId);
+    public Page<Apolice> findApolicesByCartao(Long cartaoId, Pageable pageable);
 }
