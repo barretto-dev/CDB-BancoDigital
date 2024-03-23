@@ -1,21 +1,37 @@
 package br.com.cdb.bancodigital.dto.pagamento;
 
+import br.com.cdb.bancodigital.dto.formatters.LocalDateTimeFormatter;
+import br.com.cdb.bancodigital.entity.Pagamento;
+
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class PagamentoDTO {
 
+    private Long id;
     private String destinatario;
     private BigDecimal valor;
-    private Integer qtdParcelas;
+    private Integer parcelaAtual;
+    private Integer parcelaTotal;
+    private String data;
     private Long cartaoId;
 
-    public PagamentoDTO(){}
+    public PagamentoDTO(Pagamento pagamento){
+        this.id = pagamento.getId();
+        this.destinatario = pagamento.getDestinatario();
+        this.valor = pagamento.getValor();
+        this.parcelaAtual = pagamento.getParcelaAtual();
+        this.parcelaTotal = pagamento.getParcelaTotal();
+        this.data = LocalDateTimeFormatter.formatar(pagamento.getData());
+        this.cartaoId = pagamento.getCartao().getId();
+    }
 
-    public PagamentoDTO(String destinatario, BigDecimal valor, Integer qtdParcelas, Long cartaoId) {
-        this.destinatario = destinatario;
-        this.valor = valor;
-        this.qtdParcelas = qtdParcelas;
-        this.cartaoId = cartaoId;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDestinatario() {
@@ -34,12 +50,28 @@ public class PagamentoDTO {
         this.valor = valor;
     }
 
-    public Integer getQtdParcelas() {
-        return qtdParcelas;
+    public Integer getParcelaAtual() {
+        return parcelaAtual;
     }
 
-    public void setQtdParcelas(Integer qtdParcelas) {
-        this.qtdParcelas = qtdParcelas;
+    public void setParcelaAtual(Integer parcelaAtual) {
+        this.parcelaAtual = parcelaAtual;
+    }
+
+    public Integer getParcelaTotal() {
+        return parcelaTotal;
+    }
+
+    public void setParcelaTotal(Integer parcelaTotal) {
+        this.parcelaTotal = parcelaTotal;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(LocalDateTime data) {
+        this.data = LocalDateTimeFormatter.formatar(data);
     }
 
     public Long getCartaoId() {

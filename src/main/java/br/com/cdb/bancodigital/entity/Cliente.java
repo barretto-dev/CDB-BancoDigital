@@ -17,7 +17,7 @@ public class Cliente {
     private Long id;
     @Column(name = "nome", nullable = false)
     private String nome;
-    @Column(name = "cpf", nullable = false)
+    @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
 
     @Column(name = "endereco", nullable = false)

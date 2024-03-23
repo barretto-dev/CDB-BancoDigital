@@ -9,6 +9,8 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -104,6 +106,44 @@ public abstract class Cartao {
             return false;
 
         return true;
+    }
+
+    /*
+    Retorna uma lista contendo o inicio e o fim do mês do cartão
+
+    EX:
+        SE o cartão foi cadastrado em 12-02-2024 então:
+            1° mes -> 12-02-2024 até 12-03-2024
+            2° mes -> 13-03-2024 até 11-04-2024
+    */
+    public List<LocalDate> getDataInicioFimMesCartao(){
+        LocalDate dataCriacao = this.dataCriacao;
+
+        LocalDate dataAtual = LocalDate.now(ZoneId.of("Brazil/East"));
+        Long quantidadeDias = ChronoUnit.DAYS.between( dataCriacao, dataAtual ) + 1;
+
+        LocalDate dataInicio;
+        LocalDate dataFim;
+
+        if(quantidadeDias <= 30){
+            dataInicio = dataCriacao;
+            dataFim = dataInicio.plusDays(29);
+        }else if(quantidadeDias % 30 == 0){
+            dataFim = dataAtual;
+            dataInicio = dataFim.minusDays(29);
+        }else {
+            //Diz em qual posição a data atual está em relação ao mês do cartao
+            long posicaoNoMes = quantidadeDias % 30;
+
+            dataInicio = dataAtual.minusDays(posicaoNoMes - 1);
+            dataFim = dataInicio.plusDays(29);
+        }
+
+
+        List<LocalDate> result = new ArrayList<>();
+        result.add(dataInicio);
+        result.add(dataFim);
+        return  result;
     }
 
     public abstract TipoCartao getTipo();

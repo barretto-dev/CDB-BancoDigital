@@ -4,9 +4,11 @@ import br.com.cdb.bancodigital.dto.formatters.NumeroCartaoFormatter;
 import br.com.cdb.bancodigital.dto.formatters.YearMonthFormatter;
 import br.com.cdb.bancodigital.entity.Cartao;
 import br.com.cdb.bancodigital.entity.Conta;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 public class CartaoMinDTO {
@@ -27,6 +29,8 @@ public class CartaoMinDTO {
     private boolean ativo;
 
     private Long contaId;
+    @JsonIgnore
+    private LocalDate dataCriacao;
 
     public CartaoMinDTO(){}
 
@@ -40,6 +44,8 @@ public class CartaoMinDTO {
         this.limite = cartao.getLimite();
         this.ativo = cartao.isAtivo();
         this.contaId = cartao.getConta().getId();
+        this.dataCriacao = cartao.getDataCriacao();
+
     }
 
     public Long getId() {
@@ -100,5 +106,17 @@ public class CartaoMinDTO {
 
     public void setContaId(Long contaId) {
         this.contaId = contaId;
+    }
+
+    public void setValidade(String validade) {
+        this.validade = validade;
+    }
+
+    public LocalDate getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
 }

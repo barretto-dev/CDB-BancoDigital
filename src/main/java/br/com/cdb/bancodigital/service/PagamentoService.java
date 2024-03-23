@@ -1,5 +1,6 @@
 package br.com.cdb.bancodigital.service;
 
+import br.com.cdb.bancodigital.dto.pagamento.PagamentoCreateDTO;
 import br.com.cdb.bancodigital.dto.pagamento.PagamentoDTO;
 import br.com.cdb.bancodigital.entity.Cartao;
 import br.com.cdb.bancodigital.entity.CartaoCredito;
@@ -11,6 +12,8 @@ import br.com.cdb.bancodigital.repository.PagamentoRepository;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import br.com.cdb.bancodigital.service.exception.PagamentoInvalidoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +33,20 @@ public class PagamentoService {
     @Autowired
     CartaoRepository cartaoRepository;
 
+    @Transactional(readOnly = true)
+    public Page<PagamentoDTO> findAllByCartaoId(Long cartaoId, LocalDate dataInicio, LocalDate dataFim, PageRequest pageRequest){
+        Optional<Cartao> cartaoOPT = cartaoRepository.findById(cartaoId);
+        Cartao cartao = cartaoOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Cartão infomado não encontrado")
+        );
+        Page<Pagamento> lista = repository.getPagamentosCartaoMensal(cartaoId,dataInicio,dataFim,pageRequest);
+        return lista.map( pagamento -> new PagamentoDTO(pagamento));
+
+
+    }
+
     @Transactional
-    public boolean create(PagamentoDTO dto){
+    public boolean create(PagamentoCreateDTO dto){
 
         String remetente = dto.getDestinatario();
         BigDecimal valor = dto.getValor();
@@ -75,7 +90,7 @@ public class PagamentoService {
         }else if(cartao instanceof CartaoCredito){
             BigDecimal limiteMensal = ((CartaoCredito) cartao).getLimiteMensal();
 
-            List<LocalDate> list = getDataInicioFimMesCartao(cartao);
+            List<LocalDate> list = cartao.getDataInicioFimMesCartao();
             LocalDate inicioMes = list.get(0);
             LocalDate fimMes = list.get(1);
 
@@ -116,44 +131,6 @@ public class PagamentoService {
         cartaoRepository.save(cartao);
 
         return true;
-    }
-
-    /*
-    Retorna uma lista contendo o inicio e o fim do mês do cartão
-
-    EX:
-        SE o cartão foi cadastrado em 12-02-2024 então:
-            1° mes -> 12-02-2024 até 12-03-2024
-            2° mes -> 13-03-2024 até 11-04-2024
-    */
-    private List<LocalDate> getDataInicioFimMesCartao(Cartao cartao){
-        LocalDate dataCriacao = cartao.getDataCriacao();
-
-        LocalDate dataAtual = LocalDate.now(ZoneId.of("Brazil/East"));
-        Long quantidadeDias = ChronoUnit.DAYS.between( dataCriacao, dataAtual ) + 1;
-
-        LocalDate dataInicio;
-        LocalDate dataFim;
-
-        if(quantidadeDias <= 30){
-            dataInicio = dataCriacao;
-            dataFim = dataInicio.plusDays(29);
-        }else if(quantidadeDias % 30 == 0){
-            dataFim = dataAtual;
-            dataInicio = dataFim.minusDays(29);
-        }else {
-            //Diz em qual posição a data atual está em relação ao mês do cartao
-            long posicaoNoMes = quantidadeDias % 30;
-
-            dataInicio = dataAtual.minusDays(posicaoNoMes - 1);
-            dataFim = dataInicio.plusDays(29);
-        }
-
-
-        List<LocalDate> result = new ArrayList<>();
-        result.add(dataInicio);
-        result.add(dataFim);
-        return  result;
     }
 
     private boolean isLimiteCartaoUtrapassado(List<Pagamento> pagamentosAntigos, BigDecimal valorNovoPagamento,
