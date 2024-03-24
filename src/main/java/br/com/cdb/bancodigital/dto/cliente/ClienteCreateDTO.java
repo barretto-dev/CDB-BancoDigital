@@ -2,17 +2,28 @@ package br.com.cdb.bancodigital.dto.cliente;
 
 import br.com.cdb.bancodigital.entity.Cliente;
 import br.com.cdb.bancodigital.entity.enums.TipoCliente;
-import jakarta.validation.constraints.NotEmpty;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 public class ClienteCreateDTO {
 
+    @NotEmpty(message = "nome é obrigatório")
     private String nome;
+
+    @NotEmpty(message = "cpf é obrigatório")
+    @Pattern(regexp="[\\d]{11}", message = "cpf deve ter 11 digitos")
     private String cpf;
+
+    @NotEmpty(message = "endereco é obrigatório")
     private String endereco;
+
+    @NotNull(message = "data de nascimento é obrigatória")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @Past(message = "data de nascimento não pode ter data futura")
     private LocalDate dataNascimento;
-    @NotEmpty
+    @NotNull(message = "tipo é obrigatório")
     private TipoCliente tipo;
 
     public ClienteCreateDTO(){}

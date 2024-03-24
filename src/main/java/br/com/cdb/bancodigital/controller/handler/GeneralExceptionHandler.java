@@ -3,17 +3,49 @@ package br.com.cdb.bancodigital.controller.handler;
 import br.com.cdb.bancodigital.service.exception.*;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @ControllerAdvice
 public class GeneralExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> ArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("status", status);
+        result.put("mensagem", "erro de validação na requisição");
+        result.put("caminho", request.getRequestURI());
+
+        Map<String, String> erros = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) ->{
+
+            String fieldName = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            erros.put(fieldName, message);
+        });
+        result.put("erros", erros);
+
+        return ResponseEntity.status(status).body(result);
+
+    }
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<MensagemDeErro> entityNotFound(EntidadeNaoEncontradaException e, HttpServletRequest request){
@@ -109,6 +141,8 @@ public class GeneralExceptionHandler {
                 msgError.setMensagem("Tipo inválido, por favor informe um dos seguintes valores:"+valoresValidos);
 
             }
+            else
+                msgError.setMensagem(e.getMessage());
         }
         else {
             e.printStackTrace();
