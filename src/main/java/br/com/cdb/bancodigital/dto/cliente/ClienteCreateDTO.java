@@ -2,7 +2,6 @@ package br.com.cdb.bancodigital.dto.cliente;
 
 import br.com.cdb.bancodigital.entity.Cliente;
 import br.com.cdb.bancodigital.entity.enums.TipoCliente;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -20,7 +19,6 @@ public class ClienteCreateDTO {
     private String endereco;
 
     @NotNull(message = "data de nascimento é obrigatória")
-    @JsonFormat(pattern = "dd/MM/yyyy")
     @Past(message = "data de nascimento não pode ter data futura")
     private LocalDate dataNascimento;
     @NotNull(message = "tipo é obrigatório")

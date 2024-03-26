@@ -1,13 +1,10 @@
 package br.com.cdb.bancodigital.dto.cliente;
 
-import br.com.cdb.bancodigital.dto.formatters.LocalDateFormatter;
 import br.com.cdb.bancodigital.entity.Cliente;
 import br.com.cdb.bancodigital.entity.enums.TipoCliente;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
-import java.util.stream.Stream;
 
 public class ClienteDTO {
 
@@ -15,7 +12,7 @@ public class ClienteDTO {
     private String nome;
     private String cpf;
     private String endereco;
-    private String dataNascimento;
+    private LocalDate dataNascimento;
     @NotEmpty
     private TipoCliente tipo;
 
@@ -27,7 +24,7 @@ public class ClienteDTO {
         this.nome = nome;
         this.cpf = cpf;
         this.endereco = endereco;
-        this.dataNascimento = LocalDateFormatter.formatar(dataNascimento);
+        this.dataNascimento = dataNascimento;
         this.tipo = tipo;
     }
 
@@ -36,7 +33,7 @@ public class ClienteDTO {
         this.nome = cliente.getNome();
         this.cpf = cliente.getCpf();
         this.endereco = cliente.getEndereco();
-        this.dataNascimento = LocalDateFormatter.formatar(cliente.getDataNascimento());
+        this.dataNascimento = cliente.getDataNascimento();
         this.tipo = cliente.getTipo();
     }
 
@@ -72,12 +69,12 @@ public class ClienteDTO {
         this.endereco = endereco;
     }
 
-    public String getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
     public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = LocalDateFormatter.formatar(dataNascimento);;
+        this.dataNascimento =dataNascimento;
     }
 
     public TipoCliente getTipo() {

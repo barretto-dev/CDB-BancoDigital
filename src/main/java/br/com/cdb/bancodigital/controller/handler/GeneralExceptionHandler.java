@@ -3,6 +3,7 @@ package br.com.cdb.bancodigital.controller.handler;
 import br.com.cdb.bancodigital.service.exception.*;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,7 +30,7 @@ public class GeneralExceptionHandler {
 
         Map<String, Object> result = new HashMap<>();
         result.put("status", status);
-        result.put("mensagem", "erro de validação na requisição");
+        result.put("mensagem", "erro de validação no corpo na requisição");
         result.put("caminho", request.getRequestURI());
 
         Map<String, String> erros = new HashMap<>();
@@ -41,6 +40,32 @@ public class GeneralExceptionHandler {
             String message = error.getDefaultMessage();
             erros.put(fieldName, message);
         });
+        result.put("erros", erros);
+
+        return ResponseEntity.status(status).body(result);
+
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, Object>> paramNotValid(
+            ConstraintViolationException ex,
+            HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("status", status);
+        result.put("mensagem", "erro de validação nos parametros da requisição");
+        result.put("caminho", request.getRequestURI());
+
+        List<String> erros = new ArrayList<>();
+        ex.getConstraintViolations().forEach(cv -> {
+            String[] aux = cv.getPropertyPath().toString().split("\\.");
+            String parametro = aux[aux.length - 1];
+
+            erros.add(parametro+": "+cv.getMessage());
+        });
+
         result.put("erros", erros);
 
         return ResponseEntity.status(status).body(result);
@@ -119,37 +144,52 @@ public class GeneralExceptionHandler {
         return ResponseEntity.status(status).body(msgError);
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<MensagemDeErro> jsonDeserializeError(HttpMessageNotReadableException e, HttpServletRequest request){
-
+    @ExceptionHandler(DeserializacaoException.class)
+    public ResponseEntity<MensagemDeErro> jsonDeserializeError (DeserializacaoException e, HttpServletRequest request){
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         MensagemDeErro msgError = new MensagemDeErro();
         msgError.setStatus(status.value());
+        msgError.setMensagem(e.getMessage());
         msgError.setCaminho(request.getRequestURI());
-
-        //Aqui se verifica se a falha da deserialização ocorreu devido um enum ter recebido um valor
-        //invalido
-        if (e.getCause() != null && e.getCause() instanceof InvalidFormatException) {
-
-            Pattern ENUM_MSG = Pattern.compile("values accepted for Enum class: ");
-            Matcher match = ENUM_MSG.matcher(e.getCause().getMessage());
-
-            if (match.find()) {
-                String[] split = e.getMessage().split(":");
-                String valoresValidos = split[split.length - 1];
-                msgError.setMensagem("Tipo inválido, por favor informe um dos seguintes valores:"+valoresValidos);
-
-            }
-            else
-                msgError.setMensagem(e.getMessage());
-        }
-        else {
-            e.printStackTrace();
-            msgError.setMensagem("Existe algo errado com o json da requisição");
-        }
 
         return ResponseEntity.status(status).body(msgError);
     }
+
+
+
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    public ResponseEntity<MensagemDeErro> jsonDeserializeError(HttpMessageNotReadableException e, HttpServletRequest request){
+//
+//        HttpStatus status = HttpStatus.BAD_REQUEST;
+//
+//        MensagemDeErro msgError = new MensagemDeErro();
+//        msgError.setStatus(status.value());
+//        msgError.setCaminho(request.getRequestURI());
+//
+//        //Aqui se verifica se a falha da deserialização ocorreu devido um enum ter recebido um valor
+//        //invalido
+//        if (e.getCause() != null && e.getCause() instanceof InvalidFormatException) {
+//
+//            Pattern ENUM_MSG = Pattern.compile("values accepted for Enum class: ");
+//            Matcher match = ENUM_MSG.matcher(e.getCause().getMessage());
+//
+//            if (match.find()) {
+//                String[] split = e.getMessage().split(":");
+//                String valoresValidos = split[split.length - 1];
+//                msgError.setMensagem("Tipo inválido, por favor informe um dos seguintes valores:"+valoresValidos);
+//
+//            }
+//            else
+//                msgError.setMensagem(e.getMessage());
+//        }
+//        else {
+//            e.printStackTrace();
+//            msgError.setMensagem(e.getMessage());
+//           //msgError.setMensagem("Existe algo errado com o json da requisição");
+//        }
+//
+//        return ResponseEntity.status(status).body(msgError);
+//    }
 
 }

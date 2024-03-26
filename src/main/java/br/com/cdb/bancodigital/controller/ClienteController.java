@@ -1,20 +1,26 @@
 package br.com.cdb.bancodigital.controller;
 
+import br.com.cdb.bancodigital.annotations.ValoresPermitidos;
 import br.com.cdb.bancodigital.dto.cliente.ClienteCreateDTO;
 import br.com.cdb.bancodigital.service.ClienteService;
 import br.com.cdb.bancodigital.dto.cliente.ClienteDTO;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
 
+
 @RestController
+@Validated
 @RequestMapping(value = "/cliente")
 public class ClienteController {
 
@@ -23,10 +29,12 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity<Page<ClienteDTO>> findAll(
-            @RequestParam(value = "numeroPagina", defaultValue = "0") Integer numeroPagina,
-            @RequestParam(value = "tamanhoPagina", defaultValue = "12") Integer tamanhoPagina,
-            @RequestParam(value = "ordem", defaultValue = "ASC") String ordem,
-            @RequestParam(value = "ordenarPor", defaultValue = "nome") String ordenarPor
+            @RequestParam(value = "numeroPagina", defaultValue = "0") @Min(0) Integer numeroPagina,
+            @RequestParam(value = "tamanhoPagina", defaultValue = "12") @Min(1) Integer tamanhoPagina,
+            @RequestParam(value = "ordem", defaultValue = "ASC")
+                @ValoresPermitidos(propName = "ordem", values = {"ASC", "DESC"}) String ordem,
+            @RequestParam(value = "ordenarPor", defaultValue = "nome")
+                @ValoresPermitidos(propName = "ordem", values = {"id", "nome", "cpf", "endereco", "dataNascimento", "tipo"}) String ordenarPor
     ) {
         PageRequest pageRequest = PageRequest.of(
                 numeroPagina, tamanhoPagina, Sort.Direction.valueOf(ordem), ordenarPor );
@@ -36,12 +44,12 @@ public class ClienteController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ClienteDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<ClienteDTO> findById(@PathVariable("id") @Min(1) Long id) {
         return ResponseEntity.ok().body(clienteService.findById(id));
     }
 
     @PostMapping()
-    public ResponseEntity<ClienteDTO> create(@RequestBody ClienteCreateDTO dto) {
+    public ResponseEntity<ClienteDTO> create(@Valid @RequestBody ClienteCreateDTO dto) {
         ClienteDTO novoCliente = clienteService.create(dto.toCliente());
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -51,13 +59,13 @@ public class ClienteController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ClienteDTO> update(@PathVariable Long id, @RequestBody ClienteCreateDTO dto) {
+    public ResponseEntity<ClienteDTO> update(@PathVariable @Min(1) Long id, @Valid @RequestBody ClienteCreateDTO dto) {
         ClienteDTO clienteAtualizado = clienteService.update(id,dto.toCliente());
         return ResponseEntity.status(204).body(clienteAtualizado);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable @Min(1) Long id) {
         clienteService.delete(id);
         return ResponseEntity.noContent().build();
     }
