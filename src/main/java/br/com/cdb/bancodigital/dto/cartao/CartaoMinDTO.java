@@ -4,6 +4,7 @@ import br.com.cdb.bancodigital.dto.formatters.NumeroCartaoFormatter;
 import br.com.cdb.bancodigital.dto.formatters.YearMonthFormatter;
 import br.com.cdb.bancodigital.entity.Cartao;
 import br.com.cdb.bancodigital.entity.Conta;
+import br.com.cdb.bancodigital.entity.enums.TipoCartao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 
@@ -22,7 +23,7 @@ public class CartaoMinDTO {
 
     private String codigoSeguranca;
 
-    private String tipo;
+    private TipoCartao tipo;
 
     private BigDecimal limite;
 
@@ -40,7 +41,7 @@ public class CartaoMinDTO {
         this.nomeDono = cartao.getNomeDono();
         this.validade = YearMonthFormatter.formatar(cartao.getValidade());
         this.codigoSeguranca = cartao.getCodigoSeguranca();
-        this.tipo = cartao.getTipo().name();
+        this.tipo = cartao.getTipo();
         this.limite = cartao.getLimite();
         this.ativo = cartao.isAtivo();
         this.contaId = cartao.getConta().getId();
@@ -84,9 +85,9 @@ public class CartaoMinDTO {
         this.codigoSeguranca = codigoSeguranca;
     }
 
-    public String getTipo() { return tipo; }
+    public TipoCartao getTipo() { return tipo; }
 
-    public void setTipo(String tipo) { this.tipo = tipo; }
+    public void setTipo(TipoCartao tipo) { this.tipo = tipo; }
 
     public BigDecimal getLimite() {
         return limite;

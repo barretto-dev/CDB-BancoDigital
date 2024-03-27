@@ -35,7 +35,7 @@ public class ContaController {
             @RequestParam(value = "ordem", defaultValue = "ASC")
                 @ValoresPermitidos(propName = "ordem", values = {"ASC", "DESC"}) String ordem,
             @RequestParam(value = "ordenarPor", defaultValue = "id")
-                @ValoresPermitidos(propName = "ordenarPor", values = {"id", "numero", "agencia", "numero", "saldo", "tipo"}) String ordenarPor
+                @ValoresPermitidos(propName = "ordenarPor", values = {"id", "numero", "agencia", "saldo", "tipo"}) String ordenarPor
     ) {
         PageRequest pageRequest = PageRequest.of(
                 numeroPagina, tamanhoPagina, Sort.Direction.valueOf(ordem), ordenarPor );

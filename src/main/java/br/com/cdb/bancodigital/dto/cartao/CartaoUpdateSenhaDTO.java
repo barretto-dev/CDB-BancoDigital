@@ -1,9 +1,13 @@
 package br.com.cdb.bancodigital.dto.cartao;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public class CartaoUpdateSenhaDTO {
 
+    @NotEmpty(message = "senha atual é obrigatória")
     private String senhaAtual;
 
+    @NotEmpty(message = "senha nova é obrigatória")
     private String senhaNova;
 
     public CartaoUpdateSenhaDTO(){}

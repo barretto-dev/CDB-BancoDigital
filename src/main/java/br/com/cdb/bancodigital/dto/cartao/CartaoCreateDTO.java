@@ -5,29 +5,33 @@ import br.com.cdb.bancodigital.entity.CartaoCredito;
 import br.com.cdb.bancodigital.entity.CartaoDebito;
 import br.com.cdb.bancodigital.entity.enums.TipoCartao;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class CartaoCreateDTO {
 
+    @NotEmpty(message = "nome do dono do cartão é obrigatório")
     private String nomeDono;
 
+    @NotEmpty(message = "senha do cartao é obrigatória")
     private String senha;
 
+    @NotNull(message = "id da conta do cartão é obrigatório")
     private Long contaId;
 
-    @NotEmpty
-    private TipoCartao tipoCartao;
+    @NotNull(message = "tipo do cartao é obrigatorio")
+    private TipoCartao tipo;
 
     public CartaoCreateDTO(){}
 
-    public CartaoCreateDTO(String nomeDono, String senha, Long contaId, TipoCartao tipoCartao) {
+    public CartaoCreateDTO(String nomeDono, String senha, Long contaId, TipoCartao tipo) {
         this.nomeDono = nomeDono;
         this.senha = senha;
         this.contaId = contaId;
-        this.tipoCartao = tipoCartao;
+        this.tipo = tipo;
     }
 
     public Cartao toCartao(){
-        if(tipoCartao.equals(TipoCartao.DEBITO))
+        if(tipo.equals(TipoCartao.DEBITO))
             return new CartaoDebito(nomeDono,senha,true);
         else
             return new CartaoCredito(nomeDono,senha,true);
@@ -57,11 +61,11 @@ public class CartaoCreateDTO {
         this.contaId = contaId;
     }
 
-    public TipoCartao getTipoCartao() {
-        return tipoCartao;
+    public TipoCartao getTipo() {
+        return tipo;
     }
 
-    public void setTipoCartao(TipoCartao tipoCartao) {
-        this.tipoCartao = tipoCartao;
+    public void setTipo(TipoCartao tipo) {
+        this.tipo = tipo;
     }
 }

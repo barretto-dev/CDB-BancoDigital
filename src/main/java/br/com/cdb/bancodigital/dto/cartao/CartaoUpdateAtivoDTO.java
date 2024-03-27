@@ -1,7 +1,10 @@
 package br.com.cdb.bancodigital.dto.cartao;
 
+import jakarta.validation.constraints.NotNull;
+
 public class CartaoUpdateAtivoDTO {
 
+    @NotNull(message = "atividade do cartão é obrigatório")
     private boolean ativo;
 
     public CartaoUpdateAtivoDTO(){}
