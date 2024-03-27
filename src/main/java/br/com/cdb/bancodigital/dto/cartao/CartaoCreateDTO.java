@@ -4,15 +4,16 @@ import br.com.cdb.bancodigital.entity.Cartao;
 import br.com.cdb.bancodigital.entity.CartaoCredito;
 import br.com.cdb.bancodigital.entity.CartaoDebito;
 import br.com.cdb.bancodigital.entity.enums.TipoCartao;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public class CartaoCreateDTO {
 
-    @NotEmpty(message = "nome do dono do cartão é obrigatório")
+    @NotBlank(message = "nome do dono do cartão é obrigatório")
     private String nomeDono;
 
-    @NotEmpty(message = "senha do cartao é obrigatória")
+    @NotBlank(message = "senha do cartao é obrigatória")
     private String senha;
 
     @NotNull(message = "id da conta do cartão é obrigatório")

@@ -4,6 +4,7 @@ import br.com.cdb.bancodigital.entity.Conta;
 import br.com.cdb.bancodigital.entity.ContaCorrente;
 import br.com.cdb.bancodigital.entity.ContaPoupanca;
 import br.com.cdb.bancodigital.entity.enums.TipoConta;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -13,7 +14,7 @@ import java.math.RoundingMode;
 
 public class ContaCreateDTO {
 
-    @NotEmpty(message = "número da agência é obrigatório")
+    @NotBlank(message = "número da agência é obrigatório")
     @Pattern(regexp="[\\d]{4}", message = "agencia deve ter 4 digitos")
     private String agencia;
 

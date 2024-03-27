@@ -8,14 +8,14 @@ import java.time.LocalDate;
 
 public class ClienteCreateDTO {
 
-    @NotEmpty(message = "nome é obrigatório")
+    @NotBlank(message = "nome é obrigatório")
     private String nome;
 
-    @NotEmpty(message = "cpf é obrigatório")
+    @NotBlank(message = "cpf é obrigatório")
     @Pattern(regexp="[\\d]{11}", message = "cpf deve ter 11 digitos")
     private String cpf;
 
-    @NotEmpty(message = "endereco é obrigatório")
+    @NotBlank(message = "endereco é obrigatório")
     private String endereco;
 
     @NotNull(message = "data de nascimento é obrigatória")
