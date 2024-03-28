@@ -1,14 +1,19 @@
 package br.com.cdb.bancodigital.dto.apolice;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class ApoliceCreateDTO {
 
+    @NotNull(message = "id do cartão é obrigatório")
     private Long cartaoId;
 
+    @NotNull(message = "id do seguro é obrigatório")
     private Long seguroId;
 
+    @NotNull(message = "valor da apolice é obrigatório")
     private BigDecimal valor;
 
     private ApoliceCreateDTO(){}
