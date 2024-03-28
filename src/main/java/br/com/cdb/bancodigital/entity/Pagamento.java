@@ -26,7 +26,7 @@ public class Pagamento {
     @Column(name = "parcela_total")
     private Integer parcelaTotal;
 
-    @Column(name = "data_pag", nullable = false)
+    @Column(name = "data_pagamento", nullable = false)
     private LocalDateTime data;
 
     @ManyToOne

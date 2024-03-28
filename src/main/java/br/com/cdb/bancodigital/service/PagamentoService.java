@@ -1,5 +1,7 @@
 package br.com.cdb.bancodigital.service;
 
+import br.com.cdb.bancodigital.dto.formatters.LocalDateFormatter;
+import br.com.cdb.bancodigital.dto.formatters.LocalDateTimeFormatter;
 import br.com.cdb.bancodigital.dto.pagamento.PagamentoCreateDTO;
 import br.com.cdb.bancodigital.dto.pagamento.PagamentoDTO;
 import br.com.cdb.bancodigital.entity.Cartao;
@@ -22,6 +24,7 @@ import java.math.RoundingMode;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,9 +83,13 @@ public class PagamentoService {
             BigDecimal limiteDiario = ((CartaoDebito) cartao).getLimiteDiario();
             List<Pagamento> pagamentosDia = repository.getPagamentosCartaoHoje(cartao.getId());
 
-            boolean isLimiteUtrapassado = isLimiteCartaoUtrapassado(pagamentosDia, valor, limiteDiario);
-            if(isLimiteUtrapassado)
-                throw new PagamentoInvalidoException("Limite diário do cartão foi ultrapassado");
+            HashMap<String, Object> map = isLimiteCartaoUtrapassado(pagamentosDia, valor, limiteDiario);
+            boolean isLimiteUtrapassado = (boolean) map.get("isLimiteUtrapassado");
+
+            if(isLimiteUtrapassado) {
+                BigDecimal valorRestante = (BigDecimal) map.get("valorRestante");
+                throw new PagamentoInvalidoException("Limite diário do cartão foi ultrapassado", valorRestante);
+            }
 
             Pagamento novoPagamento = new Pagamento(remetente,valor,null,null, dateNow, cartao);
             repository.save(novoPagamento);
@@ -97,10 +104,14 @@ public class PagamentoService {
             //Lista de pagamentos do cartao nos ultimos 30 dias
             List<Pagamento> pagamentosMensais = repository.getPagamentosCartaoMensal(cartao.getId(), inicioMes, fimMes);
 
-            boolean isLimiteUtrapassado = isLimiteCartaoUtrapassado(pagamentosMensais, valor, limiteMensal);
-            if(isLimiteUtrapassado)
-                throw new PagamentoInvalidoException("Limite mensal do cartão foi ultrapassado. " +
-                        "Foram consideradas todas os pagamentos de "+inicioMes+" até "+fimMes);
+            HashMap<String, Object> map = isLimiteCartaoUtrapassado(pagamentosMensais, valor, limiteMensal);
+            boolean isLimiteUtrapassado = (boolean) map.get("isLimiteUtrapassado");
+
+            if(isLimiteUtrapassado) {
+                BigDecimal valorRestante = (BigDecimal) map.get("valorRestante");
+                throw new PagamentoInvalidoException("Limite mensal do cartão foi ultrapassado",
+                        valorRestante, inicioMes, fimMes);
+            }
 
             BigDecimal valorParcela = valor.divide(BigDecimal.valueOf(qtdParcelas),2, RoundingMode.DOWN);
 
@@ -133,14 +144,19 @@ public class PagamentoService {
         return true;
     }
 
-    private boolean isLimiteCartaoUtrapassado(List<Pagamento> pagamentosAntigos, BigDecimal valorNovoPagamento,
+    private HashMap<String, Object> isLimiteCartaoUtrapassado(List<Pagamento> pagamentosAntigos, BigDecimal valorNovoPagamento,
                                               BigDecimal limite){
 
-        final BigDecimal[] valorTotal = {valorNovoPagamento};
+        HashMap<String, Object> result = new HashMap<String, Object>();
+
+        final BigDecimal[] somaPagamentosAntigos = {BigDecimal.ZERO};
         pagamentosAntigos.forEach( pa -> {
-            valorTotal[0] = valorTotal[0].add(pa.getValor());
+            somaPagamentosAntigos[0] = somaPagamentosAntigos[0].add(pa.getValor());
         });
 
-        return valorTotal[0].compareTo(limite) > 0;
+        result.put("valorRestante", limite.subtract(somaPagamentosAntigos[0]));
+        result.put("isLimiteUtrapassado", somaPagamentosAntigos[0].add(valorNovoPagamento).compareTo(limite) > 0);
+
+        return result;
     }
 }

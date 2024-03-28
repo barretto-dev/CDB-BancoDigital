@@ -109,15 +109,22 @@ public class GeneralExceptionHandler {
     }
 
     @ExceptionHandler(PagamentoInvalidoException.class)
-    public ResponseEntity<MensagemDeErro> pagamentoInvalido(PagamentoInvalidoException e, HttpServletRequest request){
+    public ResponseEntity<HashMap<String, Object>> pagamentoInvalido(PagamentoInvalidoException e, HttpServletRequest request){
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
-        MensagemDeErro msgError = new MensagemDeErro();
-        msgError.setStatus(status.value());
-        msgError.setMensagem(e.getMessage());
-        msgError.setCaminho(request.getRequestURI());
+        HashMap<String, Object> result = new LinkedHashMap<String, Object>();
+        result.put("status", status.value());
+        result.put("mensagem", e.getMessage());
+        result.put("valorRestante", e.getValorRestante());
 
-        return ResponseEntity.status(status).body(msgError);
+        if(e.getInicioMes() != null && e.getFinalMes() != null){
+            result.put("inicioMes", e.getInicioMes());
+            result.put("finalMes", e.getFinalMes());
+        }
+
+        result.put("caminho", request.getRequestURI());
+
+        return ResponseEntity.status(status).body(result);
     }
 
     @ExceptionHandler(TransferenciaPixInvalidaException.class)

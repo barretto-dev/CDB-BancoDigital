@@ -13,13 +13,13 @@ import java.util.List;
 public interface PagamentoRepository extends JpaRepository<Pagamento, Long> {
 
     @Modifying
-    @Query(nativeQuery = true, value="SELECT * FROM Pagamento WHERE cartao_id = :cartaoId AND CAST(data_pag AS DATE) = CURRENT_DATE ")
+    @Query(nativeQuery = true, value="SELECT * FROM Pagamento WHERE cartao_id = :cartaoId AND CAST(data_pagamento AS DATE) = CURRENT_DATE ")
     public List<Pagamento> getPagamentosCartaoHoje(Long cartaoId);
 
     @Modifying
-    @Query(nativeQuery = true, value="SELECT * FROM Pagamento WHERE cartao_id = :cartaoId AND CAST(data_pag AS DATE) BETWEEN :inicioMes AND :finalMes")
+    @Query(nativeQuery = true, value="SELECT * FROM Pagamento WHERE cartao_id = :cartaoId AND CAST(data_pagamento AS DATE) BETWEEN :inicioMes AND :finalMes")
     public List<Pagamento> getPagamentosCartaoMensal(Long cartaoId, LocalDate inicioMes, LocalDate finalMes);
 
-    @Query(nativeQuery = true, value="SELECT * FROM Pagamento WHERE cartao_id = :cartaoId AND CAST(data_pag AS DATE) BETWEEN :inicioMes AND :finalMes")
+    @Query(nativeQuery = true, value="SELECT * FROM Pagamento WHERE cartao_id = :cartaoId AND CAST(data_pagamento AS DATE) BETWEEN :inicioMes AND :finalMes")
     public Page<Pagamento> getPagamentosCartaoMensal(Long cartaoId, LocalDate inicioMes, LocalDate finalMes, Pageable pageable);
 }

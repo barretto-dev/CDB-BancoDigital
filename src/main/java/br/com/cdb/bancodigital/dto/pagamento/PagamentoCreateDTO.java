@@ -1,12 +1,24 @@
 package br.com.cdb.bancodigital.dto.pagamento;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 
 public class PagamentoCreateDTO {
 
+    @NotBlank(message = "destinatário é obrigatório")
     private String destinatario;
+
+    @NotNull(message = "valor é obrigatório")
     private BigDecimal valor;
+
+    @NotNull(message = "quantidade de parcelas é obrigatório")
+    @Min(value = 1, message = "quantidade de parcelas deve ser maior ou igual à 1")
     private Integer qtdParcelas;
+
+    @NotNull(message = "id do cartão é obrigatório")
     private Long cartaoId;
 
     public PagamentoCreateDTO(){}
