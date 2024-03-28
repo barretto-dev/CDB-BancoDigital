@@ -16,6 +16,9 @@ public interface ApoliceRepository extends JpaRepository<Apolice, Long> {
     @Query("SELECT a FROM Apolice a ORDER BY a.numero DESC LIMIT 1")
     public Apolice findLastApolice();
 
+    @Query("SELECT a FROM Apolice a WHERE a.cartaoCredito.id = :cartaoId AND a.seguro.id = :seguroId ")
+    public Apolice findByCartaoAndSeguro(Long cartaoId, Long seguroId);
+
     @Query("SELECT a FROM Apolice a WHERE a.cartaoCredito.id = :cartaoId")
     public Page<Apolice> findApolicesByCartao(Long cartaoId, Pageable pageable);
 }

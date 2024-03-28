@@ -80,6 +80,10 @@ public class ApoliceService {
             throw new OperacaoProibidaException("Apenas cartão de crédito pode fazer um contrato de seguro");
         }
 
+        Apolice apoliceJaExistente = repository.findByCartaoAndSeguro(dto.getCartaoId(), dto.getSeguroId());
+        if(apoliceJaExistente != null)
+            throw new OperacaoProibidaException("Este cartão já possui contrato para um seguro deste tipo");
+
         String numero = "";
         Apolice ultimaApolice = repository.findLastApolice();
         if(ultimaApolice == null)
