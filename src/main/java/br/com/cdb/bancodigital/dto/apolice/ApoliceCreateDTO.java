@@ -1,5 +1,6 @@
 package br.com.cdb.bancodigital.dto.apolice;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ public class ApoliceCreateDTO {
     private Long seguroId;
 
     @NotNull(message = "valor da apolice é obrigatório")
+    @Min(value = 1,message = "valor da apolice não pode ser menor que 1 real")
     private BigDecimal valor;
 
     private ApoliceCreateDTO(){}
