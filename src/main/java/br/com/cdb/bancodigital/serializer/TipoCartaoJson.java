@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 public class TipoCartaoJson {
 
     static class TipoCartaoDeserializador extends JsonDeserializer<TipoCartao> {
-        private List<String> enums = Arrays.stream(TipoConta.values()).map(tc -> tc.getCodigo()).toList();
+        private List<String> enums = Arrays.stream(TipoCartao.values()).map(tc -> tc.getCodigo()).toList();
         @Override
         public TipoCartao deserialize(JsonParser jsonParser, DeserializationContext context)
                 throws IOException, JacksonException {
