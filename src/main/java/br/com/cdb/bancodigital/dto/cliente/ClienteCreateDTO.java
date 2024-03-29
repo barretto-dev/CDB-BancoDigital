@@ -1,7 +1,10 @@
 package br.com.cdb.bancodigital.dto.cliente;
 
+import br.com.cdb.bancodigital.dto.cep.CepResultDTO;
+import br.com.cdb.bancodigital.dto.endereco.EnderecoCreateDTO;
 import br.com.cdb.bancodigital.entity.Cliente;
 import br.com.cdb.bancodigital.entity.enums.TipoCliente;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -15,8 +18,8 @@ public class ClienteCreateDTO {
     @Pattern(regexp="[\\d]{11}", message = "cpf deve ter 11 digitos")
     private String cpf;
 
-    @NotBlank(message = "endereco é obrigatório")
-    private String endereco;
+    @Valid
+    private EnderecoCreateDTO endereco;
 
     @NotNull(message = "data de nascimento é obrigatória")
     @Past(message = "data de nascimento não pode ter data futura")
@@ -26,7 +29,7 @@ public class ClienteCreateDTO {
 
     public ClienteCreateDTO(){}
 
-    public ClienteCreateDTO(String nome, String cpf, String endereco, LocalDate dataNascimento, TipoCliente tipo) {
+    public ClienteCreateDTO(String nome, String cpf, EnderecoCreateDTO endereco, LocalDate dataNascimento, TipoCliente tipo) {
         this.nome = nome;
         this.cpf = cpf;
         this.endereco = endereco;
@@ -34,8 +37,8 @@ public class ClienteCreateDTO {
         this.tipo = tipo;
     }
 
-    public Cliente toCliente() {
-        return new Cliente(nome, cpf, endereco, dataNascimento, tipo);
+    public Cliente toCliente(CepResultDTO dto) {
+        return new Cliente(nome, cpf, endereco.toEndereco(dto), dataNascimento, tipo);
     }
 
     public String getNome() {
@@ -54,11 +57,11 @@ public class ClienteCreateDTO {
         this.cpf = cpf;
     }
 
-    public String getEndereco() {
+    public EnderecoCreateDTO getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(String endereco) {
+    public void setEndereco(EnderecoCreateDTO endereco) {
         this.endereco = endereco;
     }
 

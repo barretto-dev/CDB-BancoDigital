@@ -1,6 +1,8 @@
 package br.com.cdb.bancodigital.dto.cliente;
 
+import br.com.cdb.bancodigital.dto.endereco.EnderecoDTO;
 import br.com.cdb.bancodigital.entity.Cliente;
+import br.com.cdb.bancodigital.entity.Endereco;
 import br.com.cdb.bancodigital.entity.enums.TipoCliente;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -11,19 +13,19 @@ public class ClienteDTO {
     private Long id;
     private String nome;
     private String cpf;
-    private String endereco;
     private LocalDate dataNascimento;
     @NotEmpty
     private TipoCliente tipo;
+    private EnderecoDTO endereco;
 
     public ClienteDTO() {
     }
 
-    public ClienteDTO(Long id, String nome, String cpf, String endereco, LocalDate dataNascimento, TipoCliente tipo) {
+    public ClienteDTO(Long id, String nome, String cpf, Endereco endereco, LocalDate dataNascimento, TipoCliente tipo) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
-        this.endereco = endereco;
+        this.endereco = new EnderecoDTO(endereco);
         this.dataNascimento = dataNascimento;
         this.tipo = tipo;
     }
@@ -32,7 +34,7 @@ public class ClienteDTO {
         this.id = cliente.getId();
         this.nome = cliente.getNome();
         this.cpf = cliente.getCpf();
-        this.endereco = cliente.getEndereco();
+        this.endereco = new EnderecoDTO(cliente.getEndereco());
         this.dataNascimento = cliente.getDataNascimento();
         this.tipo = cliente.getTipo();
     }
@@ -61,11 +63,11 @@ public class ClienteDTO {
         this.cpf = cpf;
     }
 
-    public String getEndereco() {
+    public EnderecoDTO getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(String endereco) {
+    public void setEndereco(EnderecoDTO endereco) {
         this.endereco = endereco;
     }
 

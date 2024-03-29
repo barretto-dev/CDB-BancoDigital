@@ -1,9 +1,11 @@
 package br.com.cdb.bancodigital.controller;
 
 import br.com.cdb.bancodigital.annotations.ValoresPermitidos;
+import br.com.cdb.bancodigital.dto.cep.CepResultDTO;
 import br.com.cdb.bancodigital.dto.cliente.ClienteCreateDTO;
 import br.com.cdb.bancodigital.service.ClienteService;
 import br.com.cdb.bancodigital.dto.cliente.ClienteDTO;
+import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -50,7 +53,16 @@ public class ClienteController {
 
     @PostMapping()
     public ResponseEntity<ClienteDTO> create(@Valid @RequestBody ClienteCreateDTO dto) {
-        ClienteDTO novoCliente = clienteService.create(dto.toCliente());
+
+        RestTemplate restTemplate = new RestTemplate();
+        CepResultDTO cepResultDTO = restTemplate.getForEntity(
+                                String.format("https://viacep.com.br/ws/%s/json", dto.getEndereco().getCep()),
+                                CepResultDTO.class).getBody();
+
+        if(cepResultDTO.getCep() == null)
+            throw new EntidadeNaoEncontradaException("Número do cep não foi encontrado");
+
+        ClienteDTO novoCliente = clienteService.create(dto.toCliente(cepResultDTO));
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(novoCliente.getId()).toUri();
@@ -60,7 +72,16 @@ public class ClienteController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<ClienteDTO> update(@PathVariable @Min(1) Long id, @Valid @RequestBody ClienteCreateDTO dto) {
-        ClienteDTO clienteAtualizado = clienteService.update(id,dto.toCliente());
+
+        RestTemplate restTemplate = new RestTemplate();
+        CepResultDTO cepResultDTO = restTemplate.getForEntity(
+                String.format("https://viacep.com.br/ws/%s/json", dto.getEndereco().getCep()),
+                CepResultDTO.class).getBody();
+
+        if(cepResultDTO.getCep() == null)
+            throw new EntidadeNaoEncontradaException("Número do cep não foi encontrado");
+
+        ClienteDTO clienteAtualizado = clienteService.update(id,dto.toCliente(cepResultDTO));
         return ResponseEntity.status(204).body(clienteAtualizado);
     }
 

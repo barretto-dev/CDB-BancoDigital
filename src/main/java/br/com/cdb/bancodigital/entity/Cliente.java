@@ -20,21 +20,22 @@ public class Cliente {
     @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
 
-    @Column(name = "endereco", nullable = false)
-    private String endereco;
-
     @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
 
     @Column(name = "tipo", nullable = false)
     private TipoCliente tipo;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
+    private Endereco endereco;
+
     @OneToMany(mappedBy = "dono")
     private List<Conta> contas;
 
     public Cliente(){}
 
-    public Cliente(Long id, String nome, String cpf, String endereco, LocalDate dataNascimento, TipoCliente tipo) {
+    public Cliente(Long id, String nome, String cpf, Endereco endereco, LocalDate dataNascimento, TipoCliente tipo) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -43,7 +44,7 @@ public class Cliente {
         this.tipo = tipo;
     }
 
-    public Cliente(String nome, String cpf, String endereco, LocalDate dataNascimento, TipoCliente tipo) {
+    public Cliente(String nome, String cpf, Endereco endereco, LocalDate dataNascimento, TipoCliente tipo) {
         this.nome = nome;
         this.cpf = cpf;
         this.endereco = endereco;
@@ -75,11 +76,11 @@ public class Cliente {
         this.cpf = cpf;
     }
 
-    public String getEndereco() {
+    public Endereco getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(String endereco) {
+    public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
 

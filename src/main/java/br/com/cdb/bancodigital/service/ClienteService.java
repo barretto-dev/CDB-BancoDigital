@@ -1,7 +1,9 @@
 package br.com.cdb.bancodigital.service;
 
 import br.com.cdb.bancodigital.entity.Cliente;
+import br.com.cdb.bancodigital.entity.Endereco;
 import br.com.cdb.bancodigital.repository.ClienteRepository;
+import br.com.cdb.bancodigital.repository.EnderecoRepository;
 import br.com.cdb.bancodigital.service.exception.BancoDeDadosException;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import br.com.cdb.bancodigital.dto.cliente.ClienteDTO;
@@ -21,6 +23,9 @@ import java.util.Optional;
 public class ClienteService {
     @Autowired
     ClienteRepository clienteRepository;
+
+    @Autowired
+    EnderecoRepository enderecoRepository;
 
     @Transactional(readOnly = true)
     public ClienteDTO findById(long id) {
@@ -43,7 +48,8 @@ public class ClienteService {
         Page<Cliente> lista = clienteRepository.findAll(page);
         return lista.map(cliente -> new ClienteDTO(cliente));
     }
-    
+
+    @Transactional
     public ClienteDTO create(Cliente cliente) {
         try {
             Cliente novoCliente = clienteRepository.save(cliente);
@@ -56,21 +62,39 @@ public class ClienteService {
 
 
     }
+
+    @Transactional
     public ClienteDTO update(Long id, Cliente cliente) {
         try {
             Optional<Cliente> clienteOPT = clienteRepository.findById(id);
-            Cliente clienteAtualizado = clienteOPT.orElseThrow(
+            Cliente clienteToUpdate = clienteOPT.orElseThrow(
                     () -> new EntidadeNaoEncontradaException("Cliente não encontrado")
             );
 
-            clienteAtualizado.setCpf(cliente.getCpf());
-            clienteAtualizado.setNome(cliente.getNome());
-            clienteAtualizado.setEndereco(cliente.getEndereco());
-            clienteAtualizado.setDataNascimento(cliente.getDataNascimento());
-            clienteAtualizado.setTipo(cliente.getTipo());
 
-            clienteAtualizado = clienteRepository.save(clienteAtualizado);
-            return new ClienteDTO(clienteAtualizado);
+            Endereco enderecoToUpdate = enderecoRepository.findById(clienteToUpdate.getEndereco().getId()).get();
+            Endereco novoEndereco = cliente.getEndereco();
+
+            enderecoToUpdate.setCep(novoEndereco.getCep());
+            enderecoToUpdate.setUnidadeFederativa(novoEndereco.getUnidadeFederativa());
+            enderecoToUpdate.setEstado(novoEndereco.getEstado());
+            enderecoToUpdate.setBairro(novoEndereco.getBairro());
+            enderecoToUpdate.setLogradouro(novoEndereco.getLogradouro());
+            enderecoToUpdate.setNumero(novoEndereco.getNumero());
+            enderecoToUpdate.setComplemento(novoEndereco.getComplemento());
+
+            Endereco enderecoAtualizado = enderecoRepository.save(enderecoToUpdate);
+
+            clienteToUpdate.setCpf(cliente.getCpf());
+            clienteToUpdate.setNome(cliente.getNome());
+            clienteToUpdate.setEndereco(cliente.getEndereco());
+            clienteToUpdate.setDataNascimento(cliente.getDataNascimento());
+            clienteToUpdate.setTipo(cliente.getTipo());
+            clienteToUpdate.setEndereco(enderecoAtualizado);
+
+            clienteToUpdate = clienteRepository.save(clienteToUpdate);
+
+            return new ClienteDTO(clienteToUpdate);
 
         }catch (DataIntegrityViolationException e) {
             throw new BancoDeDadosException( "Cpf informado já está sendo usado por outro cliente" );
