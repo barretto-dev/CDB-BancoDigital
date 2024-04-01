@@ -17,8 +17,8 @@ public class Endereco {
     @Column(name = "uf", nullable = false, length = 2)
     private String unidadeFederativa;
 
-    @Column(name = "estado", nullable = false)
-    private String estado;
+    @Column(name = "cidade", nullable = false)
+    private String cidade;
 
     @Column(name = "bairro", nullable = false)
     private String bairro;
@@ -37,12 +37,12 @@ public class Endereco {
 
     public Endereco(){}
 
-    public Endereco(Long id, String cep, String unidadeFederativa, String estado, String bairro,
+    public Endereco(Long id, String cep, String unidadeFederativa, String cidade, String bairro,
                     String logradouro, String numero, String complemento, Cliente cliente) {
         this.id = id;
         this.cep = cep;
         this.unidadeFederativa = unidadeFederativa;
-        this.estado = estado;
+        this.cidade = cidade;
         this.bairro = bairro;
         this.logradouro = logradouro;
         this.numero = numero;
@@ -50,11 +50,11 @@ public class Endereco {
         this.cliente = cliente;
     }
 
-    public Endereco(String cep, String unidadeFederativa, String estado,
+    public Endereco(String cep, String unidadeFederativa, String cidade,
                     String bairro, String logradouro, String numero, String complemento) {
         this.cep = cep;
         this.unidadeFederativa = unidadeFederativa;
-        this.estado = estado;
+        this.cidade = cidade;
         this.bairro = bairro;
         this.logradouro = logradouro;
         this.numero = numero;
@@ -85,12 +85,12 @@ public class Endereco {
         this.unidadeFederativa = unidadeFederativa;
     }
 
-    public String getEstado() {
-        return estado;
+    public String getCidade() {
+        return cidade;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 
     public String getBairro() {

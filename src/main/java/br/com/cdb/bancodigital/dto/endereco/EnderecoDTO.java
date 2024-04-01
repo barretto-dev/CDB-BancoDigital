@@ -11,7 +11,7 @@ public class EnderecoDTO {
 
     private String unidadeFederativa;
 
-    private String estado;
+    private String cidade;
 
     private String bairro;
 
@@ -21,12 +21,12 @@ public class EnderecoDTO {
 
     private String complemento;
 
-    public EnderecoDTO(Long id, String cep, String unidadeFederativa, String estado, String bairro,
+    public EnderecoDTO(Long id, String cep, String unidadeFederativa, String cidade, String bairro,
                        String logradouro, String numero, String complemento) {
         this.id = id;
         this.cep = cep;
         this.unidadeFederativa = unidadeFederativa;
-        this.estado = estado;
+        this.cidade = cidade;
         this.bairro = bairro;
         this.logradouro = logradouro;
         this.numero = numero;
@@ -37,7 +37,7 @@ public class EnderecoDTO {
         this.id = endereco.getId();
         this.cep = endereco.getCep();
         this.unidadeFederativa = endereco.getUnidadeFederativa();
-        this.estado = endereco.getEstado();
+        this.cidade = endereco.getCidade();
         this.bairro = endereco.getBairro();
         this.logradouro = endereco.getLogradouro();
         this.numero = endereco.getNumero();
@@ -68,12 +68,12 @@ public class EnderecoDTO {
         this.unidadeFederativa = unidadeFederativa;
     }
 
-    public String getEstado() {
-        return estado;
+    public String getCidade() {
+        return cidade;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 
     public String getBairro() {

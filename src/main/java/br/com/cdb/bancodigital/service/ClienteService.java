@@ -7,7 +7,6 @@ import br.com.cdb.bancodigital.repository.EnderecoRepository;
 import br.com.cdb.bancodigital.service.exception.BancoDeDadosException;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import br.com.cdb.bancodigital.dto.cliente.ClienteDTO;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -77,7 +76,7 @@ public class ClienteService {
 
             enderecoToUpdate.setCep(novoEndereco.getCep());
             enderecoToUpdate.setUnidadeFederativa(novoEndereco.getUnidadeFederativa());
-            enderecoToUpdate.setEstado(novoEndereco.getEstado());
+            enderecoToUpdate.setCidade(novoEndereco.getCidade());
             enderecoToUpdate.setBairro(novoEndereco.getBairro());
             enderecoToUpdate.setLogradouro(novoEndereco.getLogradouro());
             enderecoToUpdate.setNumero(novoEndereco.getNumero());
