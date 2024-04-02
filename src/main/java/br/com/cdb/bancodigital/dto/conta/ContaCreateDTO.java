@@ -4,10 +4,7 @@ import br.com.cdb.bancodigital.entity.Conta;
 import br.com.cdb.bancodigital.entity.ContaCorrente;
 import br.com.cdb.bancodigital.entity.ContaPoupanca;
 import br.com.cdb.bancodigital.entity.enums.TipoConta;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,6 +16,7 @@ public class ContaCreateDTO {
     private String agencia;
 
     @NotNull(message = "tipo é obrigatório")
+    @Min(0)
     private BigDecimal saldo;
     @NotNull(message = "tipo é obrigatório")
     private TipoConta tipo;

@@ -46,7 +46,7 @@ public class ContaService {
 
     @Transactional(readOnly = true)
     public Page<ContaDTO> findAllPaged(PageRequest page) {
-        Page<Conta> lista = repository.findAll(page);
+        Page<Conta> lista = repository.findAllPaged(page);
         return lista.map(conta -> new ContaDTO(conta));
     }
 
