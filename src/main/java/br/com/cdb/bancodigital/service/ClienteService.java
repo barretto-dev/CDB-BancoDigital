@@ -64,40 +64,42 @@ public class ClienteService {
 
     @Transactional
     public ClienteDTO update(Long id, Cliente cliente) {
-        try {
-            Optional<Cliente> clienteOPT = clienteRepository.findById(id);
-            Cliente clienteToUpdate = clienteOPT.orElseThrow(
-                    () -> new EntidadeNaoEncontradaException("Cliente não encontrado")
-            );
 
+        Optional<Cliente> clienteOPT = clienteRepository.findById(id);
+        Cliente clienteToUpdate = clienteOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Cliente não encontrado")
+        );
 
-            Endereco enderecoToUpdate = enderecoRepository.findById(clienteToUpdate.getEndereco().getId()).get();
-            Endereco novoEndereco = cliente.getEndereco();
-
-            enderecoToUpdate.setCep(novoEndereco.getCep());
-            enderecoToUpdate.setUnidadeFederativa(novoEndereco.getUnidadeFederativa());
-            enderecoToUpdate.setCidade(novoEndereco.getCidade());
-            enderecoToUpdate.setBairro(novoEndereco.getBairro());
-            enderecoToUpdate.setLogradouro(novoEndereco.getLogradouro());
-            enderecoToUpdate.setNumero(novoEndereco.getNumero());
-            enderecoToUpdate.setComplemento(novoEndereco.getComplemento());
-
-            Endereco enderecoAtualizado = enderecoRepository.save(enderecoToUpdate);
-
-            clienteToUpdate.setCpf(cliente.getCpf());
-            clienteToUpdate.setNome(cliente.getNome());
-            clienteToUpdate.setEndereco(cliente.getEndereco());
-            clienteToUpdate.setDataNascimento(cliente.getDataNascimento());
-            clienteToUpdate.setTipo(cliente.getTipo());
-            clienteToUpdate.setEndereco(enderecoAtualizado);
-
-            clienteToUpdate = clienteRepository.save(clienteToUpdate);
-
-            return new ClienteDTO(clienteToUpdate);
-
-        }catch (DataIntegrityViolationException e) {
+        Optional<Cliente> clienteCpf = clienteRepository.findByCpf(cliente.getCpf());
+        if(clienteCpf.isPresent() && clienteCpf.get().getId() != id){
             throw new BancoDeDadosException( "Cpf informado já está sendo usado por outro cliente" );
         }
+
+
+        Endereco enderecoToUpdate = enderecoRepository.findById(clienteToUpdate.getEndereco().getId()).get();
+        Endereco novoEndereco = cliente.getEndereco();
+
+        enderecoToUpdate.setCep(novoEndereco.getCep());
+        enderecoToUpdate.setUnidadeFederativa(novoEndereco.getUnidadeFederativa());
+        enderecoToUpdate.setCidade(novoEndereco.getCidade());
+        enderecoToUpdate.setBairro(novoEndereco.getBairro());
+        enderecoToUpdate.setLogradouro(novoEndereco.getLogradouro());
+        enderecoToUpdate.setNumero(novoEndereco.getNumero());
+        enderecoToUpdate.setComplemento(novoEndereco.getComplemento());
+
+        Endereco enderecoAtualizado = enderecoRepository.save(enderecoToUpdate);
+
+        clienteToUpdate.setCpf(cliente.getCpf());
+        clienteToUpdate.setNome(cliente.getNome());
+        clienteToUpdate.setEndereco(cliente.getEndereco());
+        clienteToUpdate.setDataNascimento(cliente.getDataNascimento());
+        clienteToUpdate.setTipo(cliente.getTipo());
+        clienteToUpdate.setEndereco(enderecoAtualizado);
+
+        clienteToUpdate = clienteRepository.save(clienteToUpdate);
+
+        return new ClienteDTO(clienteToUpdate);
+
     }
 
     //Não usar @transactonal aqui pq senão as exceções EntidadeNaoEncontradaException e

@@ -37,7 +37,7 @@ public class ClienteController {
             @RequestParam(value = "ordem", defaultValue = "ASC")
                 @ValoresPermitidos(propName = "ordem", values = {"ASC", "DESC"}) String ordem,
             @RequestParam(value = "ordenarPor", defaultValue = "nome")
-                @ValoresPermitidos(propName = "ordem", values = {"id", "nome", "cpf", "endereco", "dataNascimento", "tipo"}) String ordenarPor
+                @ValoresPermitidos(propName = "ordem", values = {"id", "nome", "cpf", "dataNascimento", "tipo"}) String ordenarPor
     ) {
         PageRequest pageRequest = PageRequest.of(
                 numeroPagina, tamanhoPagina, Sort.Direction.valueOf(ordem), ordenarPor );
