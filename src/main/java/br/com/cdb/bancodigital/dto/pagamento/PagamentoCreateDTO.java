@@ -12,6 +12,7 @@ public class PagamentoCreateDTO {
     private String destinatario;
 
     @NotNull(message = "valor é obrigatório")
+    @Min(1)
     private BigDecimal valor;
 
     @NotNull(message = "quantidade de parcelas é obrigatório")

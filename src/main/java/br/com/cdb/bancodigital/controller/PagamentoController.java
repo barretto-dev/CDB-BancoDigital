@@ -59,10 +59,11 @@ public class PagamentoController {
         //Lista que contem o inicio e o final do mês do cartao
         List<LocalDate> inicioFimMesCartao = cartao.getDataInicioFimMesCartao();
 
-        if(dataInicio.equals(LocalDate.parse("1111-01-11")) && dataFinal.equals(LocalDate.parse("1111-01-11"))){
+        if(dataInicio.equals(LocalDate.parse("1111-01-11")))
             dataInicio = inicioFimMesCartao.get(0);
+
+        if(dataFinal.equals(LocalDate.parse("1111-01-11")))
             dataFinal = inicioFimMesCartao.get(1);
-        }
 
         PageRequest pageRequest = PageRequest.of(
                 numeroPagina, tamanhoPagina, Sort.Direction.valueOf(ordem), ordenarPor );

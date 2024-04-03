@@ -10,6 +10,8 @@ INSERT INTO cliente(nome, cpf, data_nascimento, tipo, endereco_id) VALUES( 'Rodr
 
 INSERT INTO conta(numero,agencia, saldo, tipo, cliente_id, taxa_id) VALUES ( '000000001', '0001', 20204.00, 'COR', 1, 1);
 INSERT INTO conta(numero,agencia, saldo, tipo, cliente_id, taxa_id) VALUES ( '000000002', '0001', 55000.00, 'POU', 1, 2);
+INSERT INTO conta(numero,agencia, saldo, tipo, cliente_id, taxa_id) VALUES ( '000000003', '0001', 1500.00, 'COR', 1, 1);
+
 
 --A SENHA DE TODOS OS CARTÕES SÃO 123456
 
@@ -21,6 +23,9 @@ INSERT INTO cartao_credito(limite_mensal, cartao_id) VALUES ( 2000.00, 2);
 
 INSERT INTO cartao(numero, nome_dono, codigo_seg, senha, data_criacao, validade, ativo, conta_id, taxa_id) VALUES ( '0000000000000003', 'RODRIGO P A S', 857, '$2a$10$ugeRo3Oig3OEx5pdnv4s1ufXnsMoQUWJYMQstDGuHBJzoBi4iUVQK', '2017-02-12', '2023-02-12', true, 1, 2);
 INSERT INTO cartao_debito(limite_diario, cartao_id) VALUES ( 500.00, 3);
+
+INSERT INTO cartao(numero, nome_dono, codigo_seg, senha, data_criacao, validade, ativo, conta_id, taxa_id) VALUES ( '0000000000000004', 'RODRIGO PEREZ A S', 857, '$2a$10$ugeRo3Oig3OEx5pdnv4s1ufXnsMoQUWJYMQstDGuHBJzoBi4iUVQK', '2024-02-12', '2029-02-12', true, 3, 2);
+INSERT INTO cartao_credito(limite_mensal, cartao_id) VALUES ( 2000.00, 4);
 
 INSERT INTO pagamento(destinatario, valor, parcela_atual, parcela_total, data_pagamento, cartao_id) VALUES ('Empresa A', 50.00, null, null, '2024-03-12 19:34:43.309845', 1);
 INSERT INTO pagamento(destinatario, valor, parcela_atual, parcela_total, data_pagamento, cartao_id) VALUES ('Empresa B', 200.00, null, null, NOW(), 1);

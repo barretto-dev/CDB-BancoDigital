@@ -79,7 +79,7 @@ public abstract class Cartao {
         BigDecimal pagamentoTaxa  = valorCompra.multiply(taxaAbsoluta).setScale(2, RoundingMode.UP);
         BigDecimal saldoFinal = conta.getSaldo().subtract(pagamentoTaxa);
 
-        if(saldoFinal.compareTo(BigDecimal.ZERO) < 0)
+        if(getTipo().compareTo(TipoCartao.DEBITO) == 0 && saldoFinal.compareTo(BigDecimal.ZERO) < 0)
             return false;
 
         conta.setSaldo(saldoFinal);
@@ -90,11 +90,12 @@ public abstract class Cartao {
 
     public boolean realizarPagamento(BigDecimal valorCompra){
         boolean isTaxaPaga = aplicarTaxaDeUso(valorCompra);
-        if(!isTaxaPaga)
+        if( getTipo().compareTo(TipoCartao.DEBITO) == 0 && !isTaxaPaga)
             return false;
 
         BigDecimal saldoFinal = conta.getSaldo().subtract(valorCompra);
-        if(saldoFinal.compareTo(BigDecimal.ZERO) < 0)
+
+        if(getTipo().compareTo(TipoCartao.DEBITO) == 0 && saldoFinal.compareTo(BigDecimal.ZERO) < 0)
             return false;
 
         conta.setSaldo(saldoFinal);
