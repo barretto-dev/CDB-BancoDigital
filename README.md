@@ -1,7 +1,7 @@
 # Credenciais do banco h2
 
   - URL: jdbc:h2:mem:dbteste
-  - USERNAME: ADMIN
+  - USERNAME: admin
   - PASSWORD:
 
 # Sobre entidade cartão
