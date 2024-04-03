@@ -67,7 +67,7 @@ public class CartaoService {
     }
 
     @Transactional()
-    public CartaoMinDTO updateLimite(Long id, BigDecimal limite){
+    public CartaoMinDTO updateLimite(Long id, BigDecimal limite, String senha){
         Optional<Cartao> cartaoOPT = repository.findById(id);
         Cartao cartao = cartaoOPT.orElseThrow(
                 () -> new EntidadeNaoEncontradaException("Cartão informado não encontrado")
@@ -75,6 +75,9 @@ public class CartaoService {
 
         if(!cartao.getTipo().equals(TipoCartao.DEBITO))
             throw new OperacaoProibidaException("Apenas cartões de debito podem alterar o limite");
+
+        if( !PasswordEncoder.matches(senha, cartao.getSenha()) )
+            throw new OperacaoProibidaException("A senha informada está incorreta");
 
         if(!cartao.isAtivo())
             throw new OperacaoProibidaException("Cartão informado está inativo");
@@ -109,11 +112,14 @@ public class CartaoService {
     }
 
     @Transactional()
-    public CartaoMinDTO updateAtividade(Long id, boolean ativo){
+    public CartaoMinDTO updateAtividade(Long id, boolean ativo, String senha){
         Optional<Cartao> cartaoOPT = repository.findById(id);
         Cartao cartao = cartaoOPT.orElseThrow(
                 () -> new EntidadeNaoEncontradaException("Cartão informado não encontrada")
         );
+
+        if( !PasswordEncoder.matches(senha, cartao.getSenha()) )
+            throw new OperacaoProibidaException("A senha informada está incorreta");
 
         if(!cartao.isValido() && ativo)
             throw new PagamentoInvalidoException("Cartão informado está com a validade expirada, logo não pode ser reativado");

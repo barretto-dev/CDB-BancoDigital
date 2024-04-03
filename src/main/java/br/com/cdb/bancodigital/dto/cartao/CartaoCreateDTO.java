@@ -7,6 +7,7 @@ import br.com.cdb.bancodigital.entity.enums.TipoCartao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 public class CartaoCreateDTO {
 
@@ -14,6 +15,7 @@ public class CartaoCreateDTO {
     private String nomeDono;
 
     @NotBlank(message = "senha do cartao é obrigatória")
+    @Pattern(regexp="[\\d]{6}", message = "senha deve ter 6 digitos")
     private String senha;
 
     @NotNull(message = "id da conta do cartão é obrigatório")

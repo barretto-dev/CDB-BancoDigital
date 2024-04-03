@@ -51,7 +51,7 @@ public class CartaoController {
 
     @PutMapping(value = "/{id}/mudarLimite")
     public ResponseEntity<CartaoMinDTO> updateLimite(@PathVariable @Min(1) Long id, @Valid @RequestBody CartaoUpdateLimiteDTO dto){
-        return ResponseEntity.ok(service.updateLimite(id, dto.getLimite()));
+        return ResponseEntity.ok(service.updateLimite(id, dto.getLimite(), dto.getSenha()));
     }
 
     @PutMapping(value = "/{id}/mudarSenha")
@@ -61,7 +61,7 @@ public class CartaoController {
     }
 
     @PutMapping(value = "/{id}/mudarAtividade")
-    public ResponseEntity<CartaoMinDTO> updateLimite(@PathVariable @Min(1) Long id, @Valid @RequestBody CartaoUpdateAtivoDTO dto){
-        return ResponseEntity.ok(service.updateAtividade(id, dto.isAtivo()));
+    public ResponseEntity<CartaoMinDTO> updateAtivo(@PathVariable @Min(1) Long id, @Valid @RequestBody CartaoUpdateAtivoDTO dto){
+        return ResponseEntity.ok(service.updateAtividade(id, dto.isAtivo(), dto.getSenha()));
     }
 }
