@@ -15,7 +15,7 @@ public class ClienteCreateDTO {
     private String nome;
 
     @NotBlank(message = "cpf é obrigatório")
-    @Pattern(regexp="[\\d]{11}", message = "cpf deve ter 11 digitos")
+    @Pattern(regexp="(^\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}$)", message = "cpf deve está no formato xxx.xxx.xxx-xx")
     private String cpf;
 
     @Valid
