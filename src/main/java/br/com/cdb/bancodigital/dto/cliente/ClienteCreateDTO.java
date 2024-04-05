@@ -1,5 +1,6 @@
 package br.com.cdb.bancodigital.dto.cliente;
 
+import br.com.cdb.bancodigital.annotations.IsMaiorDeIdade;
 import br.com.cdb.bancodigital.dto.cep.CepResultDTO;
 import br.com.cdb.bancodigital.dto.endereco.EnderecoCreateDTO;
 import br.com.cdb.bancodigital.entity.Cliente;
@@ -12,6 +13,9 @@ import java.time.LocalDate;
 public class ClienteCreateDTO {
 
     @NotBlank(message = "nome é obrigatório")
+    @Pattern(regexp = "(^[a-zA-Z]+(([ ][a-zA-Z ])?[a-zA-Z]*)*$)", message = "nome apenas aceita letras e espaço")
+    @Size(min = 2, message = "nome deve ter ao menos 2 caracteres")
+    @Size(max = 100, message = "nome deve ter no maximo 100 caracteres")
     private String nome;
 
     @NotBlank(message = "cpf é obrigatório")
@@ -23,6 +27,7 @@ public class ClienteCreateDTO {
 
     @NotNull(message = "data de nascimento é obrigatória")
     @Past(message = "data de nascimento não pode ter data futura")
+    @IsMaiorDeIdade()
     private LocalDate dataNascimento;
     @NotNull(message = "tipo é obrigatório")
     private TipoCliente tipo;

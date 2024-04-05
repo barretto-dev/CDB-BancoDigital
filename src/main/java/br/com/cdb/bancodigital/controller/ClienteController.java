@@ -54,9 +54,12 @@ public class ClienteController {
     @PostMapping()
     public ResponseEntity<ClienteDTO> create(@Valid @RequestBody ClienteCreateDTO dto) {
 
+        String [] cepPartes = dto.getEndereco().getCep().split("-");
+        String cepFomatado = cepPartes[0]+cepPartes[1];
+
         RestTemplate restTemplate = new RestTemplate();
         CepResultDTO cepResultDTO = restTemplate.getForEntity(
-                                String.format("https://viacep.com.br/ws/%s/json", dto.getEndereco().getCep()),
+                                String.format("https://viacep.com.br/ws/%s/json", cepFomatado),
                                 CepResultDTO.class).getBody();
 
         if(cepResultDTO.getCep() == null)

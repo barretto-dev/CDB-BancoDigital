@@ -33,7 +33,7 @@ public class LocalDateJson {
             try {
                 data = LocalDate.parse(dataTexto, LocalDateJson.formatter);
             } catch (DateTimeParseException e) {
-                throw new DeserializacaoException("data deve está no formato dd/mm/yyyy");
+                throw new DeserializacaoException("data informada é invalida ou está no formato incorreto (dd/mm/yyyy)");
             }
 
             return data;

@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Pattern;
 public class EnderecoCreateDTO {
 
     @NotBlank(message = "cep é obrigatorio")
-    @Pattern(regexp="[\\d]{8}", message = "cep deve ter 8 digitos")
+    @Pattern(regexp="(^\\d{5}\\-\\d{3}$)", message = "cep deve está no formato xxxxx-xxx")
     private String cep;
 
     @NotBlank(message = "número do endereço é obrigatorio")

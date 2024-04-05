@@ -4,7 +4,7 @@ INSERT INTO taxa_conta(tipo, valor) VALUES ( 'RENDIMENTO_PADRAO', 0.50 );
 INSERT INTO taxa_cartao(tipo, valor) VALUES ( 'DEBITO', 2.0 );
 INSERT INTO taxa_cartao(tipo, valor) VALUES ( 'CREDITO', 4.0 );
 
-INSERT INTO endereco(cep, uf, cidade, bairro, logradouro, numero, complemento) VALUES ( '49010180', 'SE', 'Aracaju', 'Centro', 'Rua Estância', '77', '' );
+INSERT INTO endereco(cep, uf, cidade, bairro, logradouro, numero, complemento) VALUES ( '49010-180', 'SE', 'Aracaju', 'Centro', 'Rua Estância', '77', '' );
 
 INSERT INTO cliente(nome, cpf, data_nascimento, tipo, endereco_id) VALUES( 'Rodrigo Perez Almeida Santos', '123.456.789-15', '1968-05-11', 'C', 1 );
 
