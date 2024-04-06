@@ -1,6 +1,5 @@
 package br.com.cdb.bancodigital.serializer;
 
-import br.com.cdb.bancodigital.entity.enums.TipoCliente;
 import br.com.cdb.bancodigital.entity.enums.TipoConta;
 import br.com.cdb.bancodigital.service.exception.DeserializacaoException;
 import com.fasterxml.jackson.core.JacksonException;

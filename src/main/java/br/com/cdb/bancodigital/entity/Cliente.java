@@ -1,6 +1,6 @@
 package br.com.cdb.bancodigital.entity;
 
-import br.com.cdb.bancodigital.entity.enums.TipoCliente;
+import br.com.cdb.bancodigital.entity.enums.TipoClienteEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -23,7 +23,8 @@ public class Cliente {
     @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
 
-    @Column(name = "tipo", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "tipo_cliente_id", nullable = false)
     private TipoCliente tipo;
 
     @OneToOne(cascade = CascadeType.ALL)

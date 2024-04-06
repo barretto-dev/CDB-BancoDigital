@@ -3,8 +3,10 @@ package br.com.cdb.bancodigital.controller;
 import br.com.cdb.bancodigital.annotations.ValoresPermitidos;
 import br.com.cdb.bancodigital.dto.cep.CepResultDTO;
 import br.com.cdb.bancodigital.dto.cliente.ClienteCreateDTO;
+import br.com.cdb.bancodigital.entity.TipoCliente;
 import br.com.cdb.bancodigital.service.ClienteService;
 import br.com.cdb.bancodigital.dto.cliente.ClienteDTO;
+import br.com.cdb.bancodigital.service.TipoClienteService;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -29,6 +31,9 @@ public class ClienteController {
 
     @Autowired
     ClienteService clienteService;
+
+    @Autowired
+    TipoClienteService tipoClienteService;
 
     @GetMapping
     public ResponseEntity<Page<ClienteDTO>> findAll(
@@ -62,10 +67,14 @@ public class ClienteController {
                                 String.format("https://viacep.com.br/ws/%s/json", cepFomatado),
                                 CepResultDTO.class).getBody();
 
+
+
         if(cepResultDTO.getCep() == null)
             throw new EntidadeNaoEncontradaException("Número do cep não foi encontrado");
 
-        ClienteDTO novoCliente = clienteService.create(dto.toCliente(cepResultDTO));
+        TipoCliente tipoCliente = tipoClienteService.findByTipo(dto.getTipo().toString());
+
+        ClienteDTO novoCliente = clienteService.create(dto.toCliente(cepResultDTO, tipoCliente));
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(novoCliente.getId()).toUri();
@@ -84,7 +93,9 @@ public class ClienteController {
         if(cepResultDTO.getCep() == null)
             throw new EntidadeNaoEncontradaException("Número do cep não foi encontrado");
 
-        ClienteDTO clienteAtualizado = clienteService.update(id,dto.toCliente(cepResultDTO));
+        TipoCliente tipoCliente = tipoClienteService.findByTipo(dto.getTipo().toString());
+
+        ClienteDTO clienteAtualizado = clienteService.update(id,dto.toCliente(cepResultDTO, tipoCliente));
         return ResponseEntity.status(204).body(clienteAtualizado);
     }
 

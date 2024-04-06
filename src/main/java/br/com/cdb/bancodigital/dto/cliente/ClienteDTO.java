@@ -3,7 +3,7 @@ package br.com.cdb.bancodigital.dto.cliente;
 import br.com.cdb.bancodigital.dto.endereco.EnderecoDTO;
 import br.com.cdb.bancodigital.entity.Cliente;
 import br.com.cdb.bancodigital.entity.Endereco;
-import br.com.cdb.bancodigital.entity.enums.TipoCliente;
+import br.com.cdb.bancodigital.entity.enums.TipoClienteEnum;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.time.LocalDate;
@@ -15,13 +15,13 @@ public class ClienteDTO {
     private String cpf;
     private LocalDate dataNascimento;
     @NotEmpty
-    private TipoCliente tipo;
+    private TipoClienteEnum tipo;
     private EnderecoDTO endereco;
 
     public ClienteDTO() {
     }
 
-    public ClienteDTO(Long id, String nome, String cpf, Endereco endereco, LocalDate dataNascimento, TipoCliente tipo) {
+    public ClienteDTO(Long id, String nome, String cpf, Endereco endereco, LocalDate dataNascimento, TipoClienteEnum tipo) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -36,7 +36,7 @@ public class ClienteDTO {
         this.cpf = cliente.getCpf();
         this.endereco = new EnderecoDTO(cliente.getEndereco());
         this.dataNascimento = cliente.getDataNascimento();
-        this.tipo = cliente.getTipo();
+        this.tipo = cliente.getTipo().getNome();
     }
 
     public Long getId() {
@@ -79,11 +79,11 @@ public class ClienteDTO {
         this.dataNascimento =dataNascimento;
     }
 
-    public TipoCliente getTipo() {
+    public TipoClienteEnum getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoCliente tipo) {
+    public void setTipo(TipoClienteEnum tipo) {
         this.tipo = tipo;
     }
 }

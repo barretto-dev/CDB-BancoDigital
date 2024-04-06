@@ -4,7 +4,8 @@ import br.com.cdb.bancodigital.annotations.IsMaiorDeIdade;
 import br.com.cdb.bancodigital.dto.cep.CepResultDTO;
 import br.com.cdb.bancodigital.dto.endereco.EnderecoCreateDTO;
 import br.com.cdb.bancodigital.entity.Cliente;
-import br.com.cdb.bancodigital.entity.enums.TipoCliente;
+import br.com.cdb.bancodigital.entity.TipoCliente;
+import br.com.cdb.bancodigital.entity.enums.TipoClienteEnum;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
@@ -30,11 +31,11 @@ public class ClienteCreateDTO {
     @IsMaiorDeIdade()
     private LocalDate dataNascimento;
     @NotNull(message = "tipo é obrigatório")
-    private TipoCliente tipo;
+    private TipoClienteEnum tipo;
 
     public ClienteCreateDTO(){}
 
-    public ClienteCreateDTO(String nome, String cpf, EnderecoCreateDTO endereco, LocalDate dataNascimento, TipoCliente tipo) {
+    public ClienteCreateDTO(String nome, String cpf, EnderecoCreateDTO endereco, LocalDate dataNascimento, TipoClienteEnum tipo) {
         this.nome = nome;
         this.cpf = cpf;
         this.endereco = endereco;
@@ -42,8 +43,8 @@ public class ClienteCreateDTO {
         this.tipo = tipo;
     }
 
-    public Cliente toCliente(CepResultDTO dto) {
-        return new Cliente(nome, cpf, endereco.toEndereco(dto), dataNascimento, tipo);
+    public Cliente toCliente(CepResultDTO dto, TipoCliente tipoCliente) {
+        return new Cliente(nome, cpf, endereco.toEndereco(dto), dataNascimento, tipoCliente);
     }
 
     public String getNome() {
@@ -78,11 +79,11 @@ public class ClienteCreateDTO {
         this.dataNascimento = dataNascimento;
     }
 
-    public TipoCliente getTipo() {
+    public TipoClienteEnum getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoCliente tipo) {
+    public void setTipo(TipoClienteEnum tipo) {
         this.tipo = tipo;
     }
 }
