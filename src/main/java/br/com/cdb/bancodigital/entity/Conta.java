@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "conta")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipo", length = 3)
+@DiscriminatorColumn(name = "tipo")
 public abstract class Conta {
 
     private static final int AGENCIA_LENGHT = 4;
@@ -30,9 +30,6 @@ public abstract class Conta {
 
     @Column(name = "saldo", nullable = false)
     private BigDecimal saldo;
-    @ManyToOne
-    @JoinColumn(name = "taxa_id", nullable = false)
-    private TaxaConta taxa;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
@@ -103,14 +100,6 @@ public abstract class Conta {
 
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo.setScale(2, RoundingMode.UP);
-    }
-
-    public TaxaConta getTaxa() {
-        return taxa;
-    }
-
-    public void setTaxa(TaxaConta taxa) {
-        this.taxa = taxa;
     }
 
     public Cliente getDono() {

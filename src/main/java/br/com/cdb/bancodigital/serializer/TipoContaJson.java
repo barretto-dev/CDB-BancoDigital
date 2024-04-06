@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class TipoContaJson {
 
     static class TipoContaDeserializador extends JsonDeserializer<TipoConta> {
-        private List<String> enums = Arrays.stream(TipoConta.values()).map(tc -> tc.getCodigo()).toList();
+        private List<String> enums = Arrays.stream(TipoConta.values()).map(tc -> tc.toString()).toList();
         @Override
         public TipoConta deserialize(JsonParser jsonParser, DeserializationContext context)
                 throws IOException, JacksonException {
@@ -31,7 +31,7 @@ public class TipoContaJson {
                 return null;
 
             return Stream.of(TipoConta.values())
-                    .filter(tc -> tc.getCodigo().equals(tipoText))
+                    .filter(tc -> tc.toString().equals(tipoText))
                     .findFirst()
                     .orElseThrow(() -> new DeserializacaoException(
                             "Tipo da conta deve ter os seguintes valores: " + enums.toString())
@@ -42,7 +42,7 @@ public class TipoContaJson {
     static class TipoContaSerializador extends JsonSerializer<TipoConta> {
         @Override
         public void serialize(TipoConta tipoConta, JsonGenerator generator, SerializerProvider provider) throws IOException {
-            generator.writeString(tipoConta.getCodigo());
+            generator.writeString(tipoConta.toString());
         }
     }
 

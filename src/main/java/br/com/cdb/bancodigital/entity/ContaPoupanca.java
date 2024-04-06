@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Entity
-@DiscriminatorValue("POU")
+@DiscriminatorValue("POUPANCA")
 public class ContaPoupanca extends Conta{
     public ContaPoupanca(){}
     public ContaPoupanca(Long id, String numero, String agencia, BigDecimal saldo, Cliente dono) {
@@ -25,7 +25,7 @@ public class ContaPoupanca extends Conta{
 
     //aplicar taxa de rendimento da conta corrente
     public boolean aplicarTaxa(){
-        BigDecimal taxa = getTaxa().getValor();
+        BigDecimal taxa = getDono().getTipo().getRendimentoConta().getValor();
         BigDecimal rendimento = BigDecimal.ONE.add(
                 taxa.divide(new BigDecimal("100.00"), 5, RoundingMode.UP)
         );

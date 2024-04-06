@@ -21,6 +21,12 @@ public class TipoCliente {
     @OneToMany(mappedBy = "tipo")
     List<Cliente> cliente;
 
+    @OneToOne(mappedBy = "tipoCliente")
+    MensalidadeConta mensalidadeConta;
+
+    @OneToOne(mappedBy = "tipoCliente")
+    RendimentoConta rendimentoConta;
+
     public TipoCliente(){}
 
     public TipoCliente(TipoClienteEnum nome) {
@@ -49,5 +55,13 @@ public class TipoCliente {
 
     public void setCliente(List<Cliente> cliente) {
         this.cliente = cliente;
+    }
+
+    public MensalidadeConta getMensalitadeConta() {
+        return mensalidadeConta;
+    }
+
+    public RendimentoConta getRendimentoConta() {
+        return rendimentoConta;
     }
 }

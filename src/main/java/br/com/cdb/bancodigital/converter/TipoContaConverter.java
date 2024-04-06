@@ -14,7 +14,7 @@ public class TipoContaConverter implements AttributeConverter<TipoConta, String>
         if (tipoConta == null) {
             return null;
         }
-        return tipoConta.getCodigo();
+        return tipoConta.toString();
     }
 
     @Override
@@ -24,7 +24,7 @@ public class TipoContaConverter implements AttributeConverter<TipoConta, String>
         }
 
         return Stream.of(TipoConta.values())
-                .filter(tc -> tc.getCodigo().equals(codigo))
+                .filter(tc -> tc.toString().equals(codigo))
                 .findFirst()
                 .orElseThrow(() -> new EnumInvalidoException("Tipo da conta informada é invalida"));
     }

@@ -2,8 +2,13 @@ INSERT INTO tipo_cliente(nome) VALUES ( 'COMUM' );
 INSERT INTO tipo_cliente(nome) VALUES ( 'SUPER' );
 INSERT INTO tipo_cliente(nome) VALUES ( 'PREMIUM' );
 
-INSERT INTO taxa_conta(tipo, valor) VALUES ( 'MENSALIDADE_PADRAO', 12.00 );
-INSERT INTO taxa_conta(tipo, valor) VALUES ( 'RENDIMENTO_PADRAO', 0.50 );
+INSERT INTO mensalidade_conta(nome,valor,tipo_cliente_id) VALUES ( 'COMUM', 12.00, 1 );
+INSERT INTO mensalidade_conta(nome,valor,tipo_cliente_id) VALUES ( 'SUPER', 8.00, 2 );
+INSERT INTO mensalidade_conta(nome,valor,tipo_cliente_id) VALUES ( 'PREMIUM', 0.00, 3 );
+
+INSERT INTO rendimento_conta(nome,valor,tipo_cliente_id) VALUES ( 'COMUM', 0.50, 1 );
+INSERT INTO rendimento_conta(nome,valor,tipo_cliente_id) VALUES ( 'SUPER', 0.70, 2 );
+INSERT INTO rendimento_conta(nome,valor,tipo_cliente_id) VALUES ( 'PREMIUM', 0.90, 3 );
 
 INSERT INTO taxa_cartao(tipo, valor) VALUES ( 'DEBITO', 2.0 );
 INSERT INTO taxa_cartao(tipo, valor) VALUES ( 'CREDITO', 4.0 );
@@ -12,9 +17,9 @@ INSERT INTO endereco(cep, uf, cidade, bairro, logradouro, numero, complemento) V
 
 INSERT INTO cliente(nome, cpf, data_nascimento, tipo_cliente_id, endereco_id) VALUES( 'Rodrigo Perez Almeida Santos', '123.456.789-15', '1968-05-11', 1, 1 );
 
-INSERT INTO conta(numero,agencia, saldo, tipo, cliente_id, taxa_id) VALUES ( '000000001', '0001', 20204.00, 'COR', 1, 1);
-INSERT INTO conta(numero,agencia, saldo, tipo, cliente_id, taxa_id) VALUES ( '000000002', '0001', 55000.00, 'POU', 1, 2);
-INSERT INTO conta(numero,agencia, saldo, tipo, cliente_id, taxa_id) VALUES ( '000000003', '0001', 1500.00, 'COR', 1, 1);
+INSERT INTO conta(numero,agencia, saldo, tipo, cliente_id) VALUES ( '000000001', '0001', 20204.00, 'CORRRENTE', 1);
+INSERT INTO conta(numero,agencia, saldo, tipo, cliente_id) VALUES ( '000000002', '0001', 55000.00, 'POUPANCA', 1);
+INSERT INTO conta(numero,agencia, saldo, tipo, cliente_id) VALUES ( '000000003', '0001', 1500.00, 'CORRENTE', 1);
 
 
 --A SENHA DE TODOS OS CARTÕES SÃO 123456

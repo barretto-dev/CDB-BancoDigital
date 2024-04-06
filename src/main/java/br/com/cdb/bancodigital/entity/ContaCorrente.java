@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Entity
-@DiscriminatorValue("COR")
+@DiscriminatorValue("CORRENTE")
 public class ContaCorrente extends Conta{
 
     public ContaCorrente(){}
@@ -24,9 +24,9 @@ public class ContaCorrente extends Conta{
         super(agencia, saldo);
     }
 
-    //aplicação da mensalidade da contra corrente
+    //aplicação da mensalidade da conta corrente
     public boolean aplicarTaxa(){
-        BigDecimal taxaMensal = getTaxa().getValor();
+        BigDecimal taxaMensal = getDono().getTipo().getMensalitadeConta().getValor();
         BigDecimal saldoFinal = getSaldo().subtract(taxaMensal);
         if(saldoFinal.compareTo(BigDecimal.ZERO) < 0)
             return false;
