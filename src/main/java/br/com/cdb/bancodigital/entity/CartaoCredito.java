@@ -15,18 +15,14 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "cartao_id")
 public class CartaoCredito extends Cartao{
 
-    @Column(name = "limite_mensal", nullable = false)
-    private BigDecimal limiteMensal = BigDecimal.valueOf(2100.00);
-
     @OneToMany(mappedBy = "cartaoCredito")
     private List<Apolice> apolices;
 
     public CartaoCredito(){}
 
     public CartaoCredito(String nomeDono, String codigoSeguranca, String senha, YearMonth validade,
-                         LocalDate dataCriacao, boolean ativo, Conta conta, BigDecimal limiteMensal) {
+                         LocalDate dataCriacao, boolean ativo, Conta conta) {
         super(nomeDono, codigoSeguranca, senha, validade, dataCriacao, ativo, conta);
-        this.limiteMensal = limiteMensal;
     }
 
     public void pagarApolice(Apolice apolice){
@@ -47,19 +43,19 @@ public class CartaoCredito extends Cartao{
     }
 
     public BigDecimal getLimite() {
+        BigDecimal limiteMensal = getConta().getDono().getTipo().getLimiteMensalCartao().getValor();
         return limiteMensal;
     }
 
-    public void setLimite(BigDecimal limiteMensal){
-        this.limiteMensal = limiteMensal.setScale(2, RoundingMode.DOWN);
+    @Override
+    public void setLimite(BigDecimal limite) {
+        //limite do cartao de credito não pode ser editado
+        //pois ele depende do tipo de cliente do seu dono
+        //(COMUM, SUPER, PREMIUM)
     }
 
     public BigDecimal getLimiteMensal() {
-        return limiteMensal;
-    }
-
-    public void setLimiteMensal(BigDecimal limite) {
-        this.limiteMensal = limite.setScale(2, RoundingMode.DOWN);
+        return getLimite();
     }
 
     public List<Apolice> getApolices() {

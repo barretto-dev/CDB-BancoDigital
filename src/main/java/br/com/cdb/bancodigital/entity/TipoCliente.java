@@ -27,6 +27,9 @@ public class TipoCliente {
     @OneToOne(mappedBy = "tipoCliente")
     RendimentoConta rendimentoConta;
 
+    @OneToOne(mappedBy = "tipoCliente")
+    LimiteMensalCartao limiteMensalCartao;
+
     public TipoCliente(){}
 
     public TipoCliente(TipoClienteEnum nome) {
@@ -57,11 +60,15 @@ public class TipoCliente {
         this.cliente = cliente;
     }
 
-    public MensalidadeConta getMensalitadeConta() {
+    public MensalidadeConta getMensalidadeConta() {
         return mensalidadeConta;
     }
 
     public RendimentoConta getRendimentoConta() {
         return rendimentoConta;
+    }
+
+    public LimiteMensalCartao getLimiteMensalCartao() {
+        return limiteMensalCartao;
     }
 }
