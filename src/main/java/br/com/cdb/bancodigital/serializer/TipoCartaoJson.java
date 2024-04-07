@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 public class TipoCartaoJson {
 
     static class TipoCartaoDeserializador extends JsonDeserializer<TipoCartao> {
-        private List<String> enums = Arrays.stream(TipoCartao.values()).map(tc -> tc.getCodigo()).toList();
+        private List<String> enums = Arrays.stream(TipoCartao.values()).map(tc -> tc.toString()).toList();
         @Override
         public TipoCartao deserialize(JsonParser jsonParser, DeserializationContext context)
                 throws IOException, JacksonException {
@@ -32,7 +32,7 @@ public class TipoCartaoJson {
                 return null;
 
             return Stream.of(TipoCartao.values())
-                    .filter(tc -> tc.getCodigo().equals(tipoText))
+                    .filter(tc -> tc.toString().equals(tipoText))
                     .findFirst()
                     .orElseThrow(() -> new DeserializacaoException(
                             "Tipo do cartão deve ter os seguintes valores: " + enums.toString())
@@ -44,7 +44,7 @@ public class TipoCartaoJson {
     static class TipoCartaoSerializador extends JsonSerializer<TipoCartao> {
         @Override
         public void serialize(TipoCartao tipoCartao, JsonGenerator generator, SerializerProvider provider) throws IOException {
-            generator.writeString(tipoCartao.getCodigo());
+            generator.writeString(tipoCartao.toString());
         }
     }
 }

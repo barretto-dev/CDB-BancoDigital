@@ -14,7 +14,7 @@ public class TipoCartaoConverter implements AttributeConverter<TipoCartao, Strin
         if (tipoCartao == null) {
             return null;
         }
-        return tipoCartao.getCodigo();
+        return tipoCartao.toString();
     }
 
     @Override
@@ -24,7 +24,7 @@ public class TipoCartaoConverter implements AttributeConverter<TipoCartao, Strin
         }
 
         return Stream.of(TipoCartao.values())
-                .filter(tc -> tc.getCodigo().equals(codigo))
+                .filter(tc -> tc.toString().equals(codigo))
                 .findFirst()
                 .orElseThrow(() -> new EnumInvalidoException("Tipo de cartão informado é invalido"));
     }
