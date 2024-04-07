@@ -1,6 +1,7 @@
 package br.com.cdb.bancodigital.service;
 
 import br.com.cdb.bancodigital.dto.conta.ContaDTO;
+import br.com.cdb.bancodigital.dto.formatters.LocalDateFormatter;
 import br.com.cdb.bancodigital.entity.Cliente;
 import br.com.cdb.bancodigital.entity.Conta;
 import br.com.cdb.bancodigital.entity.enums.TipoConta;
@@ -16,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.Optional;
 
 @Service
@@ -57,14 +61,26 @@ public class ContaService {
     }
 
     @Transactional(readOnly = true)
-    public ContaDTO applyMensalidade(Long id){
+    public ContaDTO applyTaxa(Long id){
         Optional<Conta> contaOPT = repository.findById(id);
         Conta conta = contaOPT.orElseThrow(
                 () -> new EntidadeNaoEncontradaException("Conta informada não encontrada")
         );
 
-        if(conta.getTipo().compareTo(TipoConta.CORRENTE) != 0)
-            throw new OperacaoProibidaException("Apenas uma conta corrente está sujeita à taxa de mensalidade");
+        YearMonth yearMonth = YearMonth.now(ZoneId.of("Brazil/East"));
+        LocalDate ultimoDiaMesAtual = yearMonth.atEndOfMonth();
+        LocalDate dataAtual = LocalDate.now(ZoneId.of("Brazil/East"));
+
+        if( dataAtual.compareTo(ultimoDiaMesAtual) != 0){
+            String tipoOperacao = "";
+            if(conta.getTipo().compareTo(TipoConta.CORRENTE) == 0)
+                tipoOperacao = "Operação da mensalidade";
+            else
+                tipoOperacao = "Operação de rendimento";
+
+            String data = LocalDateFormatter.formatar(ultimoDiaMesAtual);
+            throw new OperacaoProibidaException(tipoOperacao+" da conta deve ser feita em "+data);
+        }
 
         conta.aplicarTaxa();
         conta = repository.save(conta);
