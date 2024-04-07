@@ -1,7 +1,5 @@
 package br.com.cdb.bancodigital.service;
 
-import br.com.cdb.bancodigital.dto.formatters.LocalDateFormatter;
-import br.com.cdb.bancodigital.dto.formatters.LocalDateTimeFormatter;
 import br.com.cdb.bancodigital.dto.pagamento.PagamentoCreateDTO;
 import br.com.cdb.bancodigital.dto.pagamento.PagamentoDTO;
 import br.com.cdb.bancodigital.entity.Cartao;
@@ -22,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.*;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -72,15 +68,15 @@ public class PagamentoService {
         }
 
 
-        boolean isSaldoNegativo = cartao.realizarPagamento(valor);
-        if(!isSaldoNegativo && cartao.getTipo().compareTo(TipoCartao.DEBITO) == 0)
+        boolean isSaldoPositivo = cartao.realizarPagamento(valor);
+        if(!isSaldoPositivo && cartao.getTipo().compareTo(TipoCartao.DEBITO) == 0)
             throw new PagamentoInvalidoException("Saldo insuficiente na conta para realizar pagamento");
 
         LocalDateTime dateNow = LocalDateTime.now(ZoneId.of("Brazil/East"));
 
         //Verifica limite do cartao e insere o pagamento no banco
         if( cartao instanceof CartaoDebito){
-            BigDecimal limiteDiario = ((CartaoDebito) cartao).getLimiteDiario();
+            BigDecimal limiteDiario = cartao.getLimite();
             List<Pagamento> pagamentosDia = repository.getPagamentosCartaoHoje(cartao.getId());
 
             HashMap<String, Object> map = isLimiteCartaoUtrapassado(pagamentosDia, valor, limiteDiario);
@@ -95,9 +91,9 @@ public class PagamentoService {
             repository.save(novoPagamento);
 
         }else if(cartao instanceof CartaoCredito){
-            BigDecimal limiteMensal = ((CartaoCredito) cartao).getLimiteMensal();
+            BigDecimal limiteMensal = cartao.getLimite();
 
-            List<LocalDate> list = cartao.getDataInicioFimMesCartao();
+            List<LocalDate> list = cartao.getPeriodoPagamentoAtual();
             LocalDate inicioMes = list.get(0);
             LocalDate fimMes = list.get(1);
 

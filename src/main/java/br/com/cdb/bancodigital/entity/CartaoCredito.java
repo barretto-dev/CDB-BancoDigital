@@ -15,6 +15,8 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "cartao_id")
 public class CartaoCredito extends Cartao{
 
+    private static final BigDecimal taxaDeUsoPercentual = BigDecimal.valueOf(5.00);
+
     @OneToMany(mappedBy = "cartaoCredito")
     private List<Apolice> apolices;
 
@@ -25,6 +27,12 @@ public class CartaoCredito extends Cartao{
         super(nomeDono, codigoSeguranca, senha, validade, dataCriacao, ativo, conta);
     }
 
+    public CartaoCredito(String nomeDono, String senha, boolean ativo){
+        setNomeDono(nomeDono);
+        setSenha(senha);
+        setAtivo(ativo);
+    }
+
     public void pagarApolice(Apolice apolice){
         BigDecimal valorApolice = apolice.getValor();
         Conta conta = this.getConta();
@@ -32,10 +40,26 @@ public class CartaoCredito extends Cartao{
         conta.setSaldo(novoSaldo);
     }
 
-    public CartaoCredito(String nomeDono, String senha, boolean ativo){
-        setNomeDono(nomeDono);
-        setSenha(senha);
-        setAtivo(ativo);
+    public boolean realizarPagamento(BigDecimal valorCompra){
+        BigDecimal saldoFinal = getConta().getSaldo().subtract(valorCompra);
+        getConta().setSaldo(saldoFinal);
+        return true;
+    };
+
+    public void aplicarTaxaDeUso(BigDecimal valorPagamentosMes){
+
+        BigDecimal limiteMensal = getConta().getDono().getTipo().getLimiteMensalCartao().getValor();
+
+        //Se a soma de todos os pagamentos do mês for maior que 80% do limiteMensal
+        //Será aplicada uma taxa de 5% sobre o valor da soma
+        if( valorPagamentosMes.divide(limiteMensal, 2,RoundingMode.UP).compareTo(BigDecimal.valueOf(0.80)) == 1) {
+
+            BigDecimal taxaAbsoluta = taxaDeUsoPercentual.divide(new BigDecimal("100.00"), 5, RoundingMode.UP);
+            BigDecimal pagamentoTaxa = valorPagamentosMes.multiply(taxaAbsoluta).setScale(2, RoundingMode.UP);
+            BigDecimal saldoFinal = getConta().getSaldo().subtract(pagamentoTaxa);
+
+            getConta().setSaldo(saldoFinal);
+        }
     }
 
     public TipoCartao getTipo(){

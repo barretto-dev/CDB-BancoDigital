@@ -3,11 +3,9 @@ package br.com.cdb.bancodigital.service;
 import br.com.cdb.bancodigital.dto.cartao.CartaoMinDTO;
 import br.com.cdb.bancodigital.entity.*;
 import br.com.cdb.bancodigital.entity.enums.TipoCartao;
-import br.com.cdb.bancodigital.entity.enums.TipoTaxaCartao;
 import br.com.cdb.bancodigital.repository.CartaoRepository;
 import br.com.cdb.bancodigital.repository.ContaRepository;
 import br.com.cdb.bancodigital.repository.PagamentoRepository;
-import br.com.cdb.bancodigital.repository.TaxaCartaoRepository;
 import br.com.cdb.bancodigital.service.encrypt.PasswordEncoder;
 import br.com.cdb.bancodigital.service.exception.EntidadeNaoEncontradaException;
 import br.com.cdb.bancodigital.service.exception.OperacaoProibidaException;
@@ -15,18 +13,13 @@ import br.com.cdb.bancodigital.service.exception.PagamentoInvalidoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import java.security.SecureRandom;
@@ -36,9 +29,6 @@ public class CartaoService {
 
     @Autowired
     CartaoRepository repository;
-
-    @Autowired
-    TaxaCartaoRepository taxaCartaoRepository;
 
     @Autowired
     ContaRepository contaRepository;
@@ -160,13 +150,6 @@ public class CartaoService {
         String novoCodigoSeguranca = gerarCodigoSegurancaNovoCartao();
         cartao.setCodigoSeguranca( novoCodigoSeguranca );
 
-        //Retorna a taxa adequada para o cartao ou um null
-        TaxaCartao taxaCartao = encontrarTaxaCartao(cartao);
-        if(taxaCartao == null)
-            throw new EntidadeNaoEncontradaException("Taxa para o cartao não foi encontrada");
-
-        cartao.setTaxa(taxaCartao);
-
         String senhaCripto = PasswordEncoder.encrypt(cartao.getSenha());
         cartao.setSenha(senhaCripto);
 
@@ -205,20 +188,5 @@ public class CartaoService {
         }
 
         return novoCodigoSeguranca.toString();
-    }
-
-    private TaxaCartao encontrarTaxaCartao(Cartao cartao){
-
-        TaxaCartao taxaCartao = null;
-
-        if(cartao instanceof CartaoDebito){
-            taxaCartao = taxaCartaoRepository.findByTipo(TipoTaxaCartao.DEBITO);
-
-        }
-        else if (cartao instanceof CartaoCredito){
-            taxaCartao = taxaCartaoRepository.findByTipo(TipoTaxaCartao.CREDITO);
-        }
-
-        return taxaCartao;
     }
 }

@@ -32,6 +32,16 @@ public class CartaoDebito extends Cartao {
         setSenha(senha);
         setAtivo(ativo);
     }
+    public boolean realizarPagamento(BigDecimal valorCompra){
+        BigDecimal saldoFinal = getConta().getSaldo().subtract(valorCompra);
+
+        //Se o saldo ficar negativo
+        if(saldoFinal.compareTo(BigDecimal.ZERO) == -1)
+            return false;
+
+        getConta().setSaldo(saldoFinal);
+        return true;
+    };
 
     public TipoCartao getTipo(){
         return TipoCartao.DEBITO;

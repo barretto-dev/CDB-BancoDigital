@@ -5,7 +5,6 @@ import br.com.cdb.bancodigital.entity.enums.TipoCartao;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
@@ -54,10 +53,6 @@ public abstract class Cartao {
     @JoinColumn(name = "conta_id", nullable = false)
     private Conta conta;
 
-    @ManyToOne
-    @JoinColumn(name = "taxa_id", nullable = false)
-    private TaxaCartao taxa;
-
     @OneToMany(mappedBy = "cartao")
     private List<Pagamento> pagamentos;
 
@@ -74,33 +69,7 @@ public abstract class Cartao {
         this.setConta(conta);
     }
 
-    private boolean aplicarTaxaDeUso(BigDecimal valorCompra){
-        BigDecimal taxaAbsoluta = taxa.getValor().divide(new BigDecimal("100.00"), 5, RoundingMode.UP);
-        BigDecimal pagamentoTaxa  = valorCompra.multiply(taxaAbsoluta).setScale(2, RoundingMode.UP);
-        BigDecimal saldoFinal = conta.getSaldo().subtract(pagamentoTaxa);
-
-        if(getTipo().compareTo(TipoCartao.DEBITO) == 0 && saldoFinal.compareTo(BigDecimal.ZERO) < 0)
-            return false;
-
-        conta.setSaldo(saldoFinal);
-        return true;
-
-
-    }
-
-    public boolean realizarPagamento(BigDecimal valorCompra){
-        boolean isTaxaPaga = aplicarTaxaDeUso(valorCompra);
-        if( getTipo().compareTo(TipoCartao.DEBITO) == 0 && !isTaxaPaga)
-            return false;
-
-        BigDecimal saldoFinal = conta.getSaldo().subtract(valorCompra);
-
-        if(getTipo().compareTo(TipoCartao.DEBITO) == 0 && saldoFinal.compareTo(BigDecimal.ZERO) < 0)
-            return false;
-
-        conta.setSaldo(saldoFinal);
-        return true;
-    };
+    public abstract boolean realizarPagamento(BigDecimal valorCompra);
 
     public boolean isValido(){
         if (YearMonth.now(ZoneId.of("Brazil/East")).compareTo(this.validade) > 0)
@@ -117,7 +86,7 @@ public abstract class Cartao {
             1° mes -> 12-02-2024 até 12-03-2024
             2° mes -> 13-03-2024 até 11-04-2024
     */
-    public List<LocalDate> getDataInicioFimMesCartao(){
+    public List<LocalDate> getPeriodoPagamentoAtual(){
         LocalDate dataCriacao = this.dataCriacao;
 
         LocalDate dataAtual = LocalDate.now(ZoneId.of("Brazil/East"));
@@ -219,14 +188,6 @@ public abstract class Cartao {
 
     public void setConta(Conta conta) {
         this.conta = conta;
-    }
-
-    public TaxaCartao getTaxa() {
-        return taxa;
-    }
-
-    public void setTaxa(TaxaCartao taxa) {
-        this.taxa = taxa;
     }
 
     public List<Pagamento> getPagamentos() {

@@ -14,9 +14,6 @@ INSERT INTO limite_mensal_cartao(nome,valor,tipo_cliente_id) VALUES ( 'COMUM', 1
 INSERT INTO limite_mensal_cartao(nome,valor,tipo_cliente_id) VALUES ( 'SUPER', 5000.00, 2 );
 INSERT INTO limite_mensal_cartao(nome,valor,tipo_cliente_id) VALUES ( 'PREMIUM', 10000.00, 3 );
 
-INSERT INTO taxa_cartao(tipo, valor) VALUES ( 'DEBITO', 2.0 );
-INSERT INTO taxa_cartao(tipo, valor) VALUES ( 'CREDITO', 4.0 );
-
 INSERT INTO endereco(cep, uf, cidade, bairro, logradouro, numero, complemento) VALUES ( '49010-180', 'SE', 'Aracaju', 'Centro', 'Rua Estância', '77', '' );
 
 INSERT INTO cliente(nome, cpf, data_nascimento, tipo_cliente_id, endereco_id) VALUES( 'Rodrigo Perez Almeida Santos', '123.456.789-15', '1968-05-11', 1, 1 );
@@ -28,16 +25,16 @@ INSERT INTO conta(numero,agencia, saldo, tipo, cliente_id) VALUES ( '000000003',
 
 --A SENHA DE TODOS OS CARTÕES SÃO 123456
 
-INSERT INTO cartao(numero, nome_dono, codigo_seg, senha, data_criacao, validade, ativo, conta_id, taxa_id) VALUES ( '0000000000000001', 'RODRIGO P A SANTOS', 185, '$2a$10$ugeRo3Oig3OEx5pdnv4s1ufXnsMoQUWJYMQstDGuHBJzoBi4iUVQK', '2024-03-12', '2029-03-12', true, 1, 1);
+INSERT INTO cartao(numero, nome_dono, codigo_seg, senha, data_criacao, validade, ativo, conta_id) VALUES ( '0000000000000001', 'RODRIGO P A SANTOS', 185, '$2a$10$ugeRo3Oig3OEx5pdnv4s1ufXnsMoQUWJYMQstDGuHBJzoBi4iUVQK', '2024-03-12', '2029-03-12', true, 1);
 INSERT INTO cartao_debito(limite_diario, cartao_id) VALUES ( 600.00, 1);
 
-INSERT INTO cartao(numero, nome_dono, codigo_seg, senha, data_criacao, validade, ativo, conta_id, taxa_id) VALUES ( '0000000000000002', 'RODRIGO PEREZ A S', 857, '$2a$10$ugeRo3Oig3OEx5pdnv4s1ufXnsMoQUWJYMQstDGuHBJzoBi4iUVQK', '2024-02-12', '2029-02-12', true, 1, 2);
+INSERT INTO cartao(numero, nome_dono, codigo_seg, senha, data_criacao, validade, ativo, conta_id) VALUES ( '0000000000000002', 'RODRIGO PEREZ A S', 857, '$2a$10$ugeRo3Oig3OEx5pdnv4s1ufXnsMoQUWJYMQstDGuHBJzoBi4iUVQK', '2024-02-12', '2029-02-12', true, 1);
 INSERT INTO cartao_credito(cartao_id) VALUES (2);
 
-INSERT INTO cartao(numero, nome_dono, codigo_seg, senha, data_criacao, validade, ativo, conta_id, taxa_id) VALUES ( '0000000000000003', 'RODRIGO P A S', 857, '$2a$10$ugeRo3Oig3OEx5pdnv4s1ufXnsMoQUWJYMQstDGuHBJzoBi4iUVQK', '2017-02-12', '2023-02-12', true, 1, 2);
+INSERT INTO cartao(numero, nome_dono, codigo_seg, senha, data_criacao, validade, ativo, conta_id) VALUES ( '0000000000000003', 'RODRIGO P A S', 857, '$2a$10$ugeRo3Oig3OEx5pdnv4s1ufXnsMoQUWJYMQstDGuHBJzoBi4iUVQK', '2017-02-12', '2023-02-12', true, 1);
 INSERT INTO cartao_debito(limite_diario, cartao_id) VALUES ( 600.00, 3);
 
-INSERT INTO cartao(numero, nome_dono, codigo_seg, senha, data_criacao, validade, ativo, conta_id, taxa_id) VALUES ( '0000000000000004', 'RODRIGO PEREZ A S', 857, '$2a$10$ugeRo3Oig3OEx5pdnv4s1ufXnsMoQUWJYMQstDGuHBJzoBi4iUVQK', '2024-02-12', '2029-02-12', true, 3, 2);
+INSERT INTO cartao(numero, nome_dono, codigo_seg, senha, data_criacao, validade, ativo, conta_id) VALUES ( '0000000000000004', 'RODRIGO PEREZ A S', 857, '$2a$10$ugeRo3Oig3OEx5pdnv4s1ufXnsMoQUWJYMQstDGuHBJzoBi4iUVQK', '2024-02-12', '2029-02-12', true, 3);
 INSERT INTO cartao_credito(cartao_id) VALUES (4);
 
 INSERT INTO pagamento(destinatario, valor, parcela_atual, parcela_total, data_pagamento, cartao_id) VALUES ('Empresa A', 50.00, null, null, '2024-03-12 19:34:43.309845', 1);

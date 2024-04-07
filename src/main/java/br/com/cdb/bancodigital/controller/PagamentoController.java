@@ -57,7 +57,7 @@ public class PagamentoController {
         cartao.setDataCriacao(dto.getDataCriacao());
 
         //Lista que contem o inicio e o final do mês do cartao
-        List<LocalDate> inicioFimMesCartao = cartao.getDataInicioFimMesCartao();
+        List<LocalDate> inicioFimMesCartao = cartao.getPeriodoPagamentoAtual();
 
         if(dataInicio.equals(LocalDate.parse("1111-01-11")))
             dataInicio = inicioFimMesCartao.get(0);
