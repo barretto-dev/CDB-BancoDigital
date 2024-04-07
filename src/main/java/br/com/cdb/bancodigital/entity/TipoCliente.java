@@ -30,6 +30,9 @@ public class TipoCliente {
     @OneToOne(mappedBy = "tipoCliente")
     LimiteMensalCartao limiteMensalCartao;
 
+    @OneToMany(mappedBy = "tipoCliente")
+    List<SeguroValorTipoCliente> valoresSeguro;
+
     public TipoCliente(){}
 
     public TipoCliente(TipoClienteEnum nome) {
@@ -70,5 +73,9 @@ public class TipoCliente {
 
     public LimiteMensalCartao getLimiteMensalCartao() {
         return limiteMensalCartao;
+    }
+
+    public List<SeguroValorTipoCliente> getValoresSeguro() {
+        return valoresSeguro;
     }
 }

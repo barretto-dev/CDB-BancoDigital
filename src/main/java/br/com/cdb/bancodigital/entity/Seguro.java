@@ -22,6 +22,9 @@ public class Seguro {
     @OneToMany(mappedBy = "seguro")
     private List<Apolice> apolices;
 
+    @OneToMany(mappedBy = "seguro")
+    private List<SeguroValorTipoCliente> valoresSeguro;
+
     public Seguro(){}
 
     public Seguro( String nomeProduto, String descricao){
@@ -55,5 +58,9 @@ public class Seguro {
 
     public List<Apolice> getApolices() {
         return apolices;
+    }
+
+    public List<SeguroValorTipoCliente> getValoresSeguro() {
+        return valoresSeguro;
     }
 }

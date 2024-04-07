@@ -14,16 +14,11 @@ public class ApoliceCreateDTO {
     @NotNull(message = "id do seguro é obrigatório")
     private Long seguroId;
 
-    @NotNull(message = "valor da apolice é obrigatório")
-    @Min(value = 1,message = "valor da apolice não pode ser menor que 1 real")
-    private BigDecimal valor;
-
     private ApoliceCreateDTO(){}
 
-    public ApoliceCreateDTO(Long cartaoId, Long seguroId, BigDecimal valor) {
+    public ApoliceCreateDTO(Long cartaoId, Long seguroId) {
         this.cartaoId = cartaoId;
         this.seguroId = seguroId;
-        this.valor = valor.setScale(2, RoundingMode.DOWN);
     }
 
     public Long getCartaoId() {
@@ -40,13 +35,5 @@ public class ApoliceCreateDTO {
 
     public void setSeguroId(Long seguroId) {
         this.seguroId = seguroId;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
     }
 }

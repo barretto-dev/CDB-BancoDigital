@@ -91,7 +91,7 @@ public class ApoliceService {
         else
             numero = gerarNumeroNovaApolice(ultimaApolice.getNumero());
 
-        Apolice novaApolice = new Apolice((CartaoCredito) cartao,seguro,numero, dto.getValor());
+        Apolice novaApolice = new Apolice((CartaoCredito) cartao,seguro,numero);
         novaApolice = repository.save(novaApolice);
         ((CartaoCredito) cartao).pagarApolice(novaApolice);
 
