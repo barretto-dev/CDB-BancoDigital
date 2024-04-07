@@ -26,9 +26,6 @@ public class ContaCorrente extends Conta{
     public boolean aplicarTaxa(){
         BigDecimal taxaMensal = getDono().getTipo().getMensalidadeConta().getValor();
         BigDecimal saldoFinal = getSaldo().subtract(taxaMensal);
-        if(saldoFinal.compareTo(BigDecimal.ZERO) < 0)
-            return false;
-
         setSaldo(saldoFinal);
         return true;
     }
