@@ -48,7 +48,7 @@ public class CartaoCredito extends Cartao{
 
     public void aplicarTaxaDeUso(BigDecimal valorPagamentosMes){
 
-        BigDecimal limiteMensal = getConta().getDono().getTipo().getLimiteMensalCartao().getValor();
+        BigDecimal limiteMensal = getLimite();
 
         //Se a soma de todos os pagamentos do mês for maior que 80% do limiteMensal
         //Será aplicada uma taxa de 5% sobre o valor da soma

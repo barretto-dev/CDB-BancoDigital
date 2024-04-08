@@ -64,4 +64,10 @@ public class CartaoController {
     public ResponseEntity<CartaoMinDTO> updateAtivo(@PathVariable @Min(1) Long id, @Valid @RequestBody CartaoUpdateAtivoDTO dto){
         return ResponseEntity.ok(service.updateAtividade(id, dto.isAtivo(), dto.getSenha()));
     }
+
+    @PutMapping(value = "/{id}/aplicarTaxaDeUso")
+    public ResponseEntity<String> updateAtivo(@PathVariable @Min(1) Long id){
+        service.aplicarTaxaDeUso(id);
+        return ResponseEntity.ok("");
+    }
 }

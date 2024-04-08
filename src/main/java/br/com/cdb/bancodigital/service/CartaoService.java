@@ -1,6 +1,7 @@
 package br.com.cdb.bancodigital.service;
 
 import br.com.cdb.bancodigital.dto.cartao.CartaoMinDTO;
+import br.com.cdb.bancodigital.dto.formatters.LocalDateFormatter;
 import br.com.cdb.bancodigital.entity.*;
 import br.com.cdb.bancodigital.entity.enums.TipoCartao;
 import br.com.cdb.bancodigital.repository.CartaoRepository;
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Optional;
 
 import java.security.SecureRandom;
@@ -118,6 +120,41 @@ public class CartaoService {
         cartao = repository.save(cartao);
         return new CartaoMinDTO(cartao);
 
+    }
+
+    public void aplicarTaxaDeUso(Long id){
+        Optional<Cartao> cartaoOPT = repository.findById(id);
+        Cartao cartao = cartaoOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Cartão informado não encontrada")
+        );
+
+        if(cartao instanceof CartaoDebito)
+            throw new OperacaoProibidaException("Apenas cartões de credito estão sujeitos à taxas de pagamentos");
+
+        CartaoCredito cartaoCredito = (CartaoCredito) cartao;
+
+        List<LocalDate> periodoPagamento = cartaoCredito.getPeriodoPagamentoAtual();
+        LocalDate inicioPeriodo = periodoPagamento.get(0);
+        LocalDate finalPeriodo = periodoPagamento.get(1);
+
+        LocalDate dataAtual = LocalDate.now(ZoneId.of("Brazil/East"));
+        LocalDate dataAplicacaoTaxa = finalPeriodo.plusDays(1);
+
+        if( dataAtual.compareTo(dataAplicacaoTaxa) != 0) {
+            throw new OperacaoProibidaException("A data para aplicação da taxa de uso deste cartao é "
+                    + LocalDateFormatter.formatar(dataAplicacaoTaxa));
+
+        }
+
+        List<Pagamento> pagamentosMesAtual = pagamentoRepository.getPagamentosCartaoMensal(id, inicioPeriodo,finalPeriodo);
+
+        final BigDecimal[] somaPagamentos = {BigDecimal.ZERO};
+        pagamentosMesAtual.forEach( pa -> {
+            somaPagamentos[0] = somaPagamentos[0].add(pa.getValor());
+        });
+
+        cartaoCredito.aplicarTaxaDeUso(somaPagamentos[0]);
+        repository.save(cartao);
     }
 
     @Transactional

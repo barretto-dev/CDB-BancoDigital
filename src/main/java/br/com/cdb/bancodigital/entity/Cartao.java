@@ -79,7 +79,7 @@ public abstract class Cartao {
     }
 
     /*
-    Retorna uma lista contendo o inicio e o fim do mês do cartão
+    Retorna uma lista contendo o inicio e o fim do periodo de pagamento do cartão
 
     EX:
         SE o cartão foi cadastrado em 12-02-2024 então:
