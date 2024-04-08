@@ -2,11 +2,11 @@
 
   - Criado com o framework Spring Boot
   - Utiliza o banco de dados em memoria H2
-  - Para mais detalhes: https://www.youtube.com/watch?v=GG4OyvHaqRQ&list=PLZRLW1NgUMJYTj0yoytyjczcq0N1ujVg4
+  - Diagrama com as entidades: https://drive.google.com/file/d/1AWdB41cWoGuHx1cMRTFsBU-HMyNWHWvG/view?usp=sharing
 
-# Credenciais do banco H2
+# Credenciais do banco H2 (http://localhost:8080/h2-console)
 
-  - URL: jdbc:h2:mem:dbteste
+  - JDBC URL: jdbc:h2:mem:dbteste
   - USERNAME: admin
   - PASSWORD:
 
