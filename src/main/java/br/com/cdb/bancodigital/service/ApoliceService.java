@@ -2,6 +2,7 @@ package br.com.cdb.bancodigital.service;
 
 import br.com.cdb.bancodigital.dto.apolice.ApoliceCreateDTO;
 import br.com.cdb.bancodigital.dto.apolice.ApoliceDTO;
+import br.com.cdb.bancodigital.dto.apolice.PaginaApoliceCartaoDTO;
 import br.com.cdb.bancodigital.entity.Apolice;
 import br.com.cdb.bancodigital.entity.Cartao;
 import br.com.cdb.bancodigital.entity.CartaoCredito;
@@ -34,6 +35,15 @@ public class ApoliceService {
     SeguroRepository seguroRepository;
 
     @Transactional(readOnly = true)
+    public ApoliceDTO findById(Long id){
+        Optional<Apolice> apoliceOPT = repository.findById(id);
+        Apolice apolice = apoliceOPT.orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Apolice informada não foi encontrada")
+        );
+        return new ApoliceDTO(apolice);
+    }
+
+    @Transactional(readOnly = true)
     public ApoliceDTO findByNumero(String numero){
         Apolice apolice = repository.findApoliceByNumero(numero);
         if(apolice == null)
@@ -43,7 +53,7 @@ public class ApoliceService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ApoliceDTO> findApolicesByCartao(Long cartaoId, PageRequest pageRequest){
+    public PaginaApoliceCartaoDTO findApolicesByCartao(Long cartaoId, PageRequest pageRequest){
         Optional<Cartao> cartaoOPT = cartaoRepository.findById(cartaoId);
         Cartao cartao = cartaoOPT.orElseThrow(
                 () -> new EntidadeNaoEncontradaException("Cartão informado não encontrado")
@@ -53,7 +63,7 @@ public class ApoliceService {
             throw new OperacaoProibidaException("Apenas cartão de crédito possui uma lista de apólices");
 
         Page<Apolice> page = repository.findApolicesByCartao(cartaoId,pageRequest);
-        return page.map( apolice -> new ApoliceDTO(apolice));
+        return new PaginaApoliceCartaoDTO(cartao, page);
     }
 
     @Transactional()
