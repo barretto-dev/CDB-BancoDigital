@@ -3,7 +3,7 @@ package br.com.cdb.bancodigital.dto.apolice;
 import br.com.cdb.bancodigital.dto.cartao.CartaoMinDTO;
 import br.com.cdb.bancodigital.dto.formatters.LocalDateFormatter;
 import br.com.cdb.bancodigital.dto.formatters.NumeroApoliceFormatter;
-import br.com.cdb.bancodigital.dto.seguro.SeguroDTO;
+import br.com.cdb.bancodigital.dto.seguro.SeguroMinDTO;
 import br.com.cdb.bancodigital.entity.Apolice;
 import br.com.cdb.bancodigital.entity.enums.TipoValorSeguro;
 
@@ -24,7 +24,7 @@ public class ApoliceDTO {
 
     private CartaoMinDTO dadosCartao;
 
-    private SeguroDTO dadosSeguro;
+    private SeguroMinDTO dadosSeguro;
 
     public ApoliceDTO(){}
 
@@ -35,7 +35,7 @@ public class ApoliceDTO {
         this.valor = apolice.getValor();
         this.tipoValor = apolice.getTipoValor();
         this.dadosCartao = new CartaoMinDTO(apolice.getCartaoCredito());
-        this.dadosSeguro = new SeguroDTO(apolice.getSeguro());
+        this.dadosSeguro = new SeguroMinDTO(apolice.getSeguro());
     }
 
     public Long getId() {
@@ -84,11 +84,11 @@ public class ApoliceDTO {
         this.dadosCartao = dadosCartao;
     }
 
-    public SeguroDTO getDadosSeguro() {
+    public SeguroMinDTO getDadosSeguro() {
         return dadosSeguro;
     }
 
-    public void setDadosSeguro(SeguroDTO dadosSeguro) {
+    public void setDadosSeguro(SeguroMinDTO dadosSeguro) {
         this.dadosSeguro = dadosSeguro;
     }
 }

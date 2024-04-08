@@ -40,13 +40,13 @@ INSERT INTO cartao_credito(cartao_id) VALUES (4);
 INSERT INTO pagamento(destinatario, valor, parcela_atual, parcela_total, data_pagamento, cartao_id) VALUES ('Empresa A', 50.00, null, null, '2024-03-12 19:34:43.309845', 1);
 INSERT INTO pagamento(destinatario, valor, parcela_atual, parcela_total, data_pagamento, cartao_id) VALUES ('Empresa B', 200.00, null, null, NOW(), 1);
 
-INSERT INTO seguro(nome_produto, descricao) VALUES ('Viagem', 'Regras para o seguro de viagem são...')
+INSERT INTO seguro(nome, descricao) VALUES ('Viagem', 'Regras para o seguro de viagem são...')
 
 INSERT INTO seguro_valor_tipo_cliente(tipo_cliente_id, seguro_id, valor, tipo_valor) VALUES (1, 1, 50.00, 'MENSAL')
 INSERT INTO seguro_valor_tipo_cliente(tipo_cliente_id, seguro_id, valor, tipo_valor) VALUES (2, 1, 50.00, 'MENSAL')
 INSERT INTO seguro_valor_tipo_cliente(tipo_cliente_id, seguro_id, valor, tipo_valor) VALUES (3, 1, 0.00, 'MENSAL')
 
-INSERT INTO seguro(nome_produto, descricao) VALUES ('Fraude', 'Regras para o seguro de fraude são...')
+INSERT INTO seguro(nome, descricao) VALUES ('Fraude', 'Regras para o seguro de fraude são...')
 
 INSERT INTO seguro_valor_tipo_cliente(tipo_cliente_id, seguro_id, valor, tipo_valor) VALUES (1, 2, 5000.00, 'ENTRADA')
 INSERT INTO seguro_valor_tipo_cliente(tipo_cliente_id, seguro_id, valor, tipo_valor) VALUES (2, 2, 5000.00, 'ENTRADA')

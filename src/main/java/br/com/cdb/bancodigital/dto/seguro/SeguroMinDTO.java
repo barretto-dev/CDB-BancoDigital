@@ -2,9 +2,7 @@ package br.com.cdb.bancodigital.dto.seguro;
 
 import br.com.cdb.bancodigital.entity.Seguro;
 
-import java.util.List;
-
-public class SeguroDTO {
+public class SeguroMinDTO {
 
     private Long id;
 
@@ -12,19 +10,12 @@ public class SeguroDTO {
 
     private String descricao;
 
-    private List<ValoresSeguroDTO> valores;
+    public SeguroMinDTO(){}
 
-    public SeguroDTO(){}
-
-    public SeguroDTO(Seguro seguro){
+    public SeguroMinDTO(Seguro seguro){
         this.id = seguro.getId();
         this.nome = seguro.getNome();
         this.descricao = seguro.getDescricao();
-
-        this.valores = seguro.getValoresSeguro()
-                .stream().map(
-                        vs -> new ValoresSeguroDTO(vs.getTipoCliente().getNome(), vs.getValor(), vs.getTipoValor())
-                ).toList();
     }
 
     public Long getId() {
@@ -49,13 +40,5 @@ public class SeguroDTO {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public List<ValoresSeguroDTO> getValores() {
-        return valores;
-    }
-
-    public void setValores(List<ValoresSeguroDTO> valores) {
-        this.valores = valores;
     }
 }

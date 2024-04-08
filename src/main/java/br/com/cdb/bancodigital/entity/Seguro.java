@@ -13,8 +13,8 @@ public class Seguro {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "nome_produto", nullable = false)
-    private String nomeProduto;
+    @Column(name = "nome", nullable = false)
+    private String nome;
 
     @Column(name = "descricao", nullable = false, length = 6000)
     private String descricao;
@@ -27,8 +27,8 @@ public class Seguro {
 
     public Seguro(){}
 
-    public Seguro( String nomeProduto, String descricao){
-        this.nomeProduto = nomeProduto;
+    public Seguro(String nome, String descricao){
+        this.nome = nome;
         this.descricao = descricao;
     }
 
@@ -40,12 +40,12 @@ public class Seguro {
         this.id = id;
     }
 
-    public String getNomeProduto() {
-        return nomeProduto;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeProduto(String nomeProduto) {
-        this.nomeProduto = nomeProduto;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getDescricao() {
